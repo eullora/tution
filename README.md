@@ -19,6 +19,10 @@ The repository is organised into multiple sub‑projects/modules:
 * **Zeeble.Mobile** — Student application for Class test, document sharing, video stream, fee payments.
 * Solution file: `Zeeble.sln` — root solution for building the entire system
 
+<img src="admin.png" width="300" height="650">
+
+
+
 ## ✅ Features
 
 * Student / class management — maintain records of students, class groups, etc.
