@@ -1,6 +1,6 @@
 # Zeeble
 
-A management system for private classes — designed for IIT‑JEE / NEET tuition / coaching classes.
+A management system for private classes — designed for private tutions from class 7th to IIT JEE / NEET  and other coaching classes.
 
 ## 🎯 What is Zeeble
 
@@ -11,13 +11,10 @@ Zeeble is a private class management platform that helps manage students, classe
 The repository is organised into multiple sub‑projects/modules:
 
 * **Zeeble.Api** — Backend API
-* **Zeeble.Web** — Web frontend / public-facing UI
-* **Zeeble.Admin** — Admin interface / management dashboard
-* **Zeeble.UI** — Shared UI components
-* **Zeeble.DataLib** — Data access / models / data handling
-* **Zeeble.ClassTest** — Class test module
-* **Zeeble.Quiz** — Quiz / assessment module
-* **Zeeble.Utils** — Utility/helper code
+* **Zeeble.Web.Admin** — Admin interface / management dashboard
+* **Zeeble.Shared** — Data access / models / data handling
+* **Zeeble.BubbleCheck** — OMR Sheet Scanner desktop application.
+* **Zeeble.Mobile** — Student application for Class test, document sharing, video stream, fee payments.
 * Solution file: `Zeeble.sln` — root solution for building the entire system
 
 ## ✅ Features
@@ -25,7 +22,6 @@ The repository is organised into multiple sub‑projects/modules:
 * Student / class management — maintain records of students, class groups, etc.
 * Quiz & test management — create, schedule, and manage quizzes/tests for classes.
 * Admin dashboard — manage classes, students, enrollments, assessments.
-* Web interface — for students, parents or users.
 * Modular architecture — separation of API, UI, data layers for maintainability and extensibility.
 * Multi-module solution — easier to extend with new features (e.g. reports, analytics, attendance, payment, etc.).
 
@@ -41,7 +37,7 @@ The repository is organised into multiple sub‑projects/modules:
 
 ```bash
 # Clone the repo
-git clone https://github.com/eullora/zeeble.git
+git clone https://github.com/eullora/tution.git
 cd zeeble
 
 # Open solution in your IDE (e.g. Visual Studio, VS Code with C# plugin)
@@ -79,13 +75,9 @@ Please include a license file (`LICENSE`) if you wish to open-source the project
 
 ## 🛠️ Roadmap / Future Work / TODOs
 
-* Student attendance / enrollment tracking
 * Payment / fees management
 * Report generation (performance, attendance, analytics)
-* Notification / email / SMS integration
-* Role / permission management (admin, teacher, student, parent)
-* Mobile / responsive UI
-* Tests & CI / automated deployment
+* Notification / email / WhatsApp integration
 
 ## 🤝 Acknowledgments / Credits
 
