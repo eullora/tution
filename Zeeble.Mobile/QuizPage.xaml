@@ -1,0 +1,53 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"    
+             BackgroundColor="White"
+             x:Class="Zeeble.Mobile.QuizPage" 
+             Title="Quiz">
+
+    
+    <StackLayout Margin="0,5">
+        <Button Text="X" HorizontalOptions="End" BackgroundColor="Transparent" TextColor="Black" Clicked="ButtonClose_Clicked"></Button>
+        
+        <StackLayout Spacing="10" Orientation="Horizontal"  VerticalOptions="Center" HorizontalOptions="Center" Margin="10,0,0,10" >
+            <Button x:Name="LabelCorrect" TextColor="White" CornerRadius="50"  BackgroundColor="Green" FontSize="Small"></Button>
+            <Button x:Name="LabelInCorrect" TextColor="White" CornerRadius="50" BackgroundColor="Red" FontSize="Small"></Button>
+        </StackLayout>
+
+        <StackLayout>
+            <ProgressBar x:Name="TimerProgressBar" ProgressColor="Navy" Progress="1.0" HeightRequest="10"></ProgressBar>
+            <Label x:Name="LabelSubject" TextColor="Black" FontAttributes="Bold,Italic" FontSize="10" HorizontalOptions="Start" Margin="5"></Label>
+            <ScrollView HeightRequest="300" BackgroundColor="#fff" Margin="0,10">
+                <WebView x:Name="QuestionWebView"  HorizontalOptions="FillAndExpand" Margin="5"  VerticalOptions="FillAndExpand"></WebView>
+            </ScrollView>
+        </StackLayout>
+
+        <StackLayout Orientation="Horizontal" HorizontalOptions="Center" VerticalOptions="End"  Margin="2"  x:Name="StackOptions">
+
+            <Button Margin="10" FontSize="Medium" CornerRadius="50" 
+                        BorderColor="Black" BorderWidth="2" 
+                        HeightRequest="55" WidthRequest="55" Text="A" x:Name="ButtonA" Clicked="OnAnswerClicked"                         
+                        BackgroundColor="Gray" TextColor="White">
+
+            </Button>
+            <Button BorderColor="Black" BorderWidth="2" FontSize="Medium" 
+                        Margin="10" HeightRequest="55" WidthRequest="55" CornerRadius="50" Text="B" x:Name="ButtonB" Clicked="OnAnswerClicked" 
+                        BackgroundColor="Gray" TextColor="White">
+
+            </Button>
+            <Button BorderColor="Black" BorderWidth="2" FontSize="Medium" Margin="10" HeightRequest="55" WidthRequest="55" CornerRadius="50"
+                        Text="C" x:Name="ButtonC" Clicked="OnAnswerClicked" BackgroundColor="Gray" TextColor="White"></Button>
+
+            <Button BorderColor="Black" BorderWidth="2" FontSize="Medium" Margin="10" HeightRequest="55" WidthRequest="55" CornerRadius="50"
+                        Text="D" x:Name="ButtonD" Clicked="OnAnswerClicked" BackgroundColor="Gray" TextColor="White"></Button>
+        </StackLayout>
+
+        <Label x:Name="FeedbackLabel"  HorizontalOptions="Center" FontAttributes="Bold" Margin="0,20" FontSize="Medium" />
+
+        <ActivityIndicator x:Name="QuizActivityLoader" IsRunning="False" IsVisible="False"  Color="Navy"/>
+        
+        <Label x:Name="LabelInfo" Margin="5" FontSize="10" Text="" TextColor="LightGray" FontAttributes="Italic" VerticalOptions="Center" HorizontalOptions="Center"></Label>
+        
+    </StackLayout>
+
+</ContentPage>

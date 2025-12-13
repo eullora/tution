@@ -1,0 +1,106 @@
+﻿@using Zeeble.Shared.Entities
+@{
+    Layout = null;
+    ViewData["Title"] = "Admission Form";
+    var row = ViewData["StudentRow"] as Student;
+}
+<em class="text-dark">Computer Generated Document</em>
+<div class="container-fluid p-3">
+    <div class="row justify-content-center">
+        <div class="col-md-12">
+            <section class="py-3 py-md-5">
+                <div class="row justify-content-center">
+                    <div class="col-12">
+                        <div class="row gy-3 mb-3">
+                            <div class="col-12">
+                                <small class="float-end">@row.CreatedOn.ToString("dd/MM/yyyy hh:mm")</small>
+                            </div>
+                            <div class="col-6 border-bottom">
+                                <h4 class="text-uppercase text-endx mt-2 mb-4">Admission Form</h4>
+
+                            </div>
+                            <div class="col-6 border-bottom">
+                                <a class="d-block text-end" href="#!">
+                                    <img src="~/@ViewData["LogoImage"]" class="img-fluid mb-4" width="160" height="60">
+                                </a>
+                            </div>
+                            <div class="col-6">
+                                <h5>@row.FullName</h5>
+                                <address>
+                                    <div>
+                                        @row.Address
+                                    </div>
+                                    <div>Parent  Phone: +91 @row.ParentMobile</div>
+                                    <div>Student Phone: +91 @row.MobileNumber</div>
+                                </address>
+                            </div>
+                            <div class="col-6">
+                                <div class="float-end">
+                                    <h5>Roll Number: @row.RollNumber</h5>
+                                    <div>Batch: @row.Batch.Title</div>
+                                    <div>School: @row.SchoolName</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        @if (row.Installments != null && row.Installments.Count() > 0)
+                        {
+
+                            <div class="row mb-3">
+                                <div class="col-12">
+                                    <table class="table  table-bordered">
+                                        <tr>
+                                            <td></td>
+                                            <td>Term</td>
+                                            <td>Due Date</td>
+                                            <td>Amount</td>
+                                        </tr>
+
+                                        @foreach (var install in row.Installments)
+                                        {
+                                            <tr>
+                                                <td></td>
+                                                <td>@install.PayTerm.Title</td>
+                                                <td>@install.DueDate.ToString("dd/MM/yyyy")</td>
+                                                <td>₹ @install.Amount /-</td>
+                                            </tr>
+                                        }
+                                    </table>
+
+                                    <table class="table table-striped">
+                                        <tbody class="table-group-divider">
+                                            <tr>
+                                                <th scope="row">1</th>
+                                                <td>Course Fee</td>
+                                                <td class="text-end">₹ @row.Batch.Fee.Amount/-</td>
+                                            </tr>
+                                            <tr>
+                                                <th scope="row">2</th>
+                                                <td>Discount</td>
+                                                <td class="text-end">₹ @row.Discount/-</td>
+                                            </tr>
+
+                                            <tr>
+                                                <th scope="row" colspan="2" class="text-uppercase text-end">Total</th>
+                                                <td class="text-end">₹ @(row.Batch.Fee.Amount - row.Discount)/-</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+
+                                </div>
+                            </div>
+                        }
+
+                    </div>
+                    <div class="col-md-12">
+                        <h6>Date: @DateTime.Now.ToString("dd-MM-yyyy hh:mm")</h6>
+                        <h6 class="float-start mt-5">Parent Singnature</h6>
+                        <h6 class="float-end mt-5">Authority Singnature</h6>
+                    </div>
+
+                </div>
+
+            </section>
+        </div>
+    </div>
+</div>

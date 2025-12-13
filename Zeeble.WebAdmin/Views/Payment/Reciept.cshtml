@@ -1,0 +1,113 @@
+﻿@using Zeeble.Shared.Entities
+@{
+    Layout = null;
+    var row = ViewData["Row"] as Student;
+    var discount = row != null && row.Discount != null ? row.Discount.Value : 0;
+    var amtAfterDiscount = row.Batch.Fee.Amount - discount;
+    var balanceDue = amtAfterDiscount - row.Payments.Sum(x => x.Amount);
+}
+
+<div class="row">
+    <div class="col-md-12 text-center">
+        <img src="~/@ViewData["LogoImage"]" class="img-fluid mb-1" width="175" height="75">
+        <h5>@ViewData["LogoText"]</h5>
+        <div>@ViewData["Address"]</div>
+        <div>@ViewData["Phone"]</div>
+        <div class="fw-bold">GST Number: @ViewData["GSTNumber"]</div>
+    </div>
+
+    <div class="col-md-12">
+        <hr />
+        <table>
+
+            <tr>
+                <td width="100%" align="left">
+                    <span class="fw-bold">@row.FullName</span>
+                </td>
+            </tr>
+            <tr>
+                <td width="100%" align="left">
+                    <span>Roll Number : @row.RollNumber</span>
+                </td>
+            </tr>
+            <tr>
+                <td width="100%" align="left">
+                    <span>Batch: @row.Batch.Title</span>
+                </td>
+            </tr>
+        </table>
+    </div>
+
+    <div class="col-md-12 mt-3">
+        <h5>Reciept</h5>
+        <table border="1" class="table table-bordered">
+            <thead>
+                <tr>
+                    <th width="40%">Description</th>
+                    <th width="20%">Date</th>
+                    <th>Amount</th>
+                </tr>
+            </thead>
+            <tbody>
+
+                @foreach (var trn in row.Payments)
+                {
+                    <tr>
+                        <td width="60%" class="fs-6">@trn.Installment.PayTerm.Title</td>
+                        <td width="20%" class="fs-6">@trn.CreatedOn.ToString("dd-MM-yyyy")</td>
+                        <td align="right" class="fs-6"><i class="fa fa-inr"></i> @trn.Amount.ToString("#,##0.00")/-</td>
+                    </tr>
+                }
+
+                <tr>
+                    <td colspan="2" class="text-right fs-6">
+                        <p>
+                            <strong>Total Fee </strong>
+                        </p>
+
+                        <p>
+                            <strong>Discount</strong>
+                        </p>
+
+                        <p>
+                            <strong>Paid Amount </strong>
+                        </p>
+                        <p>
+                            <strong>Balance Due </strong>
+                        </p>
+                    </td>
+
+                    <td align="right" class="fs-6">
+                        <p>
+                            <i class="fa fa-inr"></i> @row.Batch.Fee.Amount.ToString("#,##0.00")/-
+                        </p>
+
+                        <p>
+                            <i class="fa fa-inr"></i> @discount.ToString("#,##0.00")/-
+                        </p>
+
+                        <p>
+                            <i class="fa fa-inr"></i> @row.Payments.Sum(x => x.Amount).ToString("#,##0.00")/-
+                        </p>
+                        <p>
+                            <i class="fa fa-inr"></i>@balanceDue.ToString("#,##0.00")/-
+                        </p>
+                    </td>
+                </tr>
+
+            </tbody>
+        </table>
+    </div>
+
+    <div class="col-md-12">
+        <h6><b>Date :</b> @DateTime.Now.ToString("dd-MM-yyyy hh:mm")</h6>
+        <h6 style="color: rgb(140, 140, 140);">Thank You!</h6>
+
+        <h6 class="float-end">Authority Singnature.</h6>
+        <div class="float-start">
+            <img src="@ViewData["BarCode"]" height="100" width="100" />
+        </div>
+    </div>
+
+</div>
+

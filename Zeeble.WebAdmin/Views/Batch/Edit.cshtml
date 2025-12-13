@@ -1,0 +1,69 @@
+﻿@using Zeeble.Shared.Entities
+@{
+    ViewData["Title"] = "Edit Batch";  
+    var row = ViewData["BatchRow"] as Batch;
+    var standardOptions = ViewData["StandardRows"] as IEnumerable<Standard>;    
+    var feeRows = ViewData["FeesRows"] as IEnumerable<Fee>;
+}
+<div class="container">
+    <div class="row justify-content-center">
+        <h3 class="mt-4 mb-5">Edit Batch</h3>
+        
+        <div class="col-lg-12">
+            <form asp-controller="batch" asp-action="edit" method="post">                
+                <div class="row mb-3">                   
+                    <input type="hidden" value="@row.Id" name="BatchId" />
+
+                    <div class="col-md-6 mt-3">
+                        <label for="inputTitle" class="mb-2">Title *</label>
+                        <input class="form-control form-control-lg" id="inputTitle" maxlength="20" required type="text" name="Title" value="@row.Title">
+                        <label for="selectStandardId" class=" mt-2 mb-2">Standard *</label>
+                        <select class="form-select form-select-lg" id="selectStandardId" name="StandardId" required>
+                            <option value=""></option>
+                            @foreach (var standard in standardOptions)
+                            {
+                                <option value="@standard.Id">@standard.Name</option>
+                            }
+                        </select>
+
+                        <label for="selectFees" class="mt-2 mb-2">Fees *</label>
+                        <select class="form-select form-select-lg" id="selectFees" name="FeeId" >
+                            <option value=""></option>
+                            @foreach (var fee in feeRows)
+                            {
+                                <option value="@fee.Id">@fee.Title</option>
+                            }
+                        </select>
+                        <label id="labelAmount" class="text-danger mt-2"></label>
+                    </div>                    
+                </div>
+
+                <div class="mt-4 mb-0">
+                    <button type="submit" class="btn btn-primary">Update</button>
+                </div>
+
+            </form>               
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script type="application/json" id="scriptFees">@Html.Raw(ViewData["FeesJson"].ToString())</script>
+        <script type="text/javascript">
+        activeAdminMenu('#batches');
+        $(document).ready(function () {
+
+          $('#selectFees').on('change', function () {
+              $('#labelAmount').text("");
+              var feeModel  = JSON.parse($('#scriptFees').text());
+              var id = $(this).val();
+              var fee =  feeModel.find(x => x.Id == id )              
+              $('#labelAmount').text(`Rs ${fee.Amount} /-`);
+          });
+
+            $('#selectFees').val('@row.FeeId');
+            $('#selectStandardId').val('@row.StandardId');
+        });
+
+    </script>
+}

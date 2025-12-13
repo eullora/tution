@@ -1,0 +1,126 @@
+﻿@using Zeeble.Shared.Entities
+@{
+    ViewData["Title"] = "Add Questions";
+    var batches = ViewData["Batches"] as IEnumerable<Batch>;
+    var exanTypes = ViewData["ExamTypes"] as IEnumerable<ExamType>;
+    var subjects = ViewData["Subjects"] as IEnumerable<Subject>;
+}
+@section Styles {
+    <link rel="stylesheet" type="text/css" href="~/css/lib/jquery.datetimepicker.min.css" />
+    <partial name="_Select2Css" />
+}
+
+<div class="container">
+    <div class="row justify-content-center">
+        <h3 class="mt-4 mb-5">Add Exam</h3>
+        <div class="col-lg-12">
+            <form asp-controller="exam" asp-action="add" method="post" enctype="multipart/form-data">
+
+                <div class="row mb-3">
+
+
+                    <div class="col-md-12 mt-3">
+                        <label for="inputName" class="mb-2">Title *</label>
+                        <input class="form-control" id="inputName" autocomplete="off" maxlength="150" required type="text" name="Name">
+                    </div>
+
+                    <div class="col-md-4 mt-3">
+                        <label for="inputMarks" class="mb-2">Marks *</label>
+                        <input class="form-control" id="inputMarks" autocomplete="off" maxlength="3" required type="text" name="Marks">
+                    </div>
+
+                    <div class="col-md-4 mt-3">
+                        <label for="inputTime" class="mb-2">Time (in minutes) *</label>
+                        <input class="form-control" id="inputTime" maxlength="3" autocomplete="off" required type="text" name="Time">
+                    </div>
+
+                    <div class="col-md-4 mt-3">
+                        <label for="inputTime" class="mb-2">Question Count *</label>
+                        <input class="form-control" id="inputQuestionCount" maxlength="3" autocomplete="off" required type="text" name="QuestionCount">
+                    </div>
+
+                    <div class="col-md-12 mt-3">
+                        <label for="selectBatch" class="mb-2">Batch *</label>
+                        <select class="form-select" id="selectBatch" multiple name="BatchIds" required>
+                            <option value=""></option>
+                            @foreach (var batch in batches)
+                            {
+                                <option value="@batch.Id">@batch.Title</option>
+                            }
+                        </select>
+                    </div>
+
+                    <div class="col-md-3 mt-3">
+                        <label for="inputStartDate" class="mb-2">Start Date Time *</label>
+                        <input class="form-control" id="inputStartDate"
+                               required type="text" autocomplete="off" name="StartDate">
+                    </div>
+                    <div class="col-md-3 mt-3">
+                        <label for="inputEndDate" class="mb-2">End Date Time *</label>
+                        <input class="form-control" id="inputEndDate"
+                               required type="text" autocomplete="off" name="EndDate">
+                    </div>
+
+
+                    <div class="col-md-3 mt-3">
+                        <label for="selectBatch" class="mb-2">Exam Type *</label>
+                        <select class="form-select" id="selectExamType" name="ExamTypeId" required>
+                            <option value=""></option>
+                            @foreach (var exmType in exanTypes)
+                            {
+                                <option value="@exmType.Id">@exmType.Name</option>
+                            }
+                        </select>
+                    </div>
+
+                    <div class="col-md-3 mt-3">
+                        <label for="selectExamMode" class="mb-2">Exam Mode *</label>
+                        <select class="form-select" id="selectExamMode" name="ExamModeId" required>
+                            <option value=""></option>
+                            <option value="0">Offline</option>
+                            <option value="1">Online</option>
+                        </select>
+                    </div>
+
+                    <div class="col-md-12 mt-3">
+                        <label for="selectSubject" class="mb-2">Subjects *</label>
+                        <select class="form-select" id="selectSubject" name="SubjectIds" multiple required>
+                            <option value=""></option>
+                            @foreach (var subject in subjects)
+                            {
+                                <option value="@subject.Id">@subject.Name</option>
+                            }
+                        </select>
+                    </div>
+
+                    <div class="col-md-12 mt-4">
+                        <label for="questionFile" class="mb-2">Question File * (<span id="spanFileType">MS Word, PDF</span>) </label>
+                        <input class="form-control"  id="questionFile" required type="file" name="questionFile">
+                        <div id="fileMessage" class="text-danger mt-2"></div>
+                    </div>
+                   
+                </div>
+
+                <div class="col-md-12 mt-4 mb-4 text-danger">
+                    @ViewData["Message"]
+                </div>
+
+                <div class="mt-5 mb-0">
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                </div>
+
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.11/jquery-ui.min.js"></script>
+    <script src="~/js/lib/jquery.datetimepicker.full.js"></script>
+    <partial name="_Select2Js" />
+    <script src="~/js/exams.js"></script>
+    <script type="text/javascript">
+        activeAdminMenu('#exam');
+    </script>
+}

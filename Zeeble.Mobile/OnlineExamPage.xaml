@@ -1,0 +1,47 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Zeeble.Mobile.OnlineExamPage" BackgroundColor="#FFF"
+             Shell.NavBarIsVisible="True"             
+             Shell.TitleColor="Black"
+             Shell.BackgroundColor="#FFF"      
+             Shell.ForegroundColor="Gray"
+             xmlns:ce ="clr-namespace:Zeeble.Mobile.CustomControls" 
+             Title="Exams">
+
+    <Grid Padding="7" RowDefinitions="Auto, *">
+
+        <ActivityIndicator Grid.Row="0"
+                           HorizontalOptions="Center"
+                           HeightRequest="35"
+                           IsVisible="False"
+                           Color="Gray"
+                           IsRunning="False"
+                           x:Name="LoadingIndicator" />
+
+        <ListView Grid.Row="1"
+                        x:Name="ListViewExams"
+                        Margin="0,10"
+                        SelectionMode="Single" SeparatorVisibility="Default" HasUnevenRows="True" 
+                  SeparatorColor="LightGray" ItemSelected="ListViewExams_ItemSelected" VerticalOptions="FillAndExpand">
+
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <ViewCell>
+                        <StackLayout  Padding="5" Spacing="2" VerticalOptions="StartAndExpand">
+                            <Label Text="{Binding Name}" FontSize="15" Margin="10,0" FontAttributes="Bold"  TextColor="Black"/>
+                            <Label Text="{Binding MarksDisplay}" TextColor="Black" FontSize="Micro" Margin="10,0"  HorizontalOptions="Start" VerticalOptions="Center"
+                                HorizontalTextAlignment="Center" VerticalTextAlignment="Center"></Label>
+                            <Label   Text="{Binding Remark}" FontSize="12" Margin="10,0"   TextColor="DarkSlateGrey"/>
+                            <Label   Text="{Binding EndDate, StringFormat='{0:MMMM dd, yyyy}'}" HorizontalOptions="End" FontSize="12" Margin="0,-10,5,0"   TextColor="DarkSlateGrey"/>
+
+                        </StackLayout>
+                    </ViewCell>
+                </DataTemplate>
+                
+            </ListView.ItemTemplate>
+
+        </ListView>
+    </Grid>
+
+</ContentPage>

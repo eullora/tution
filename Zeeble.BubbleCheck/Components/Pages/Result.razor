@@ -1,0 +1,72 @@
+﻿@page "/result"
+@inject IJSRuntime JS
+@inject HttpClient Http
+@using MauiApp1.Models
+
+<div class="container-fluid p-4">
+    <div class="row">
+        <div class="col-md-12">
+
+            @if (Items == null)
+            {
+                <em class="p-3">Loading...</em>
+            }
+            else
+            {
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Exam Name</th>
+                            <th>Batch</th>                            
+                            <th>No of Questions</th>
+                            <th>Marks</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Items)
+                        {
+                            <tr>
+                                <td>@item.Name</td>
+                                <td>@item.Batches</td>
+                                <td>@item.QuestionCount</td>
+                                <td>@item.Marks</td>
+                                <td align="right">
+                                    <a title="Answer Sheet" href="#" class="btn btn-primary">
+                                        <i class="bi bi-file-earmark-spreadsheet"></i>
+                                    </a>
+                                    <a class="btn btn-danger" title="Delete Result" href="#"><i class="bi bi-trash"></i></a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            }
+        </div>
+    </div>
+</div>
+
+@code {
+    private List<ExamListModel> Items = null;
+
+    private ExamListModel SelectedItem;
+
+    private void SelectItem(ExamListModel item)
+    {
+        SelectedItem = item;
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        Items = await Http.GetFromJsonAsync<List<ExamListModel>>("api/exams/offline/1/false");
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            await JS.InvokeVoidAsync("setBodyClass", "scroll");
+        }
+    }
+   
+}

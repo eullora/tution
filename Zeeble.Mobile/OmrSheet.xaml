@@ -1,0 +1,33 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<the49:BottomSheet xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Zeeble.Mobile.OmrSheet"
+             xmlns:the49="https://schemas.the49.com/dotnet/2023/maui"
+             Padding="5, 5" Background="#FFF">
+    <the49:BottomSheet.Detents>
+        <the49:MediumDetent IsDefault="True" />
+        <the49:FullscreenDetent />
+    </the49:BottomSheet.Detents>
+    
+    <ScrollView>
+        <StackLayout Padding="1" Margin="1">
+            <Button Text="X"  HorizontalOptions="Center" 
+                    CornerRadius="50"
+                    FontSize="Small" 
+                    Margin="0,0,0,10" Clicked="ButtonClose_Clicked" 
+                    BackgroundColor="LightGray" TextColor="Black" FontAttributes="Bold" ></Button> 
+            <Grid x:Name="GridOmr">
+
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+            </Grid>
+        </StackLayout>
+    </ScrollView>
+    
+</the49:BottomSheet>

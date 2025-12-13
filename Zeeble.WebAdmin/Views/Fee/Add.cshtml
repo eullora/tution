@@ -1,0 +1,41 @@
+﻿@using Zeeble.Shared.Entities
+@{
+    ViewData["Title"] = "Add Fee";
+}
+
+<div class="container">
+    <div class="row">
+        <h3 class="mt-4 mb-5">Add Fee</h3>
+
+        <div class="col-lg-12 mt-3">
+            <form asp-controller="fee" asp-action="add" method="post">
+                <div class="row mb-3">
+
+                    <div class="col-md-5 mt-3">
+                        <div class="mb-3">
+                            <label for="inputName" class="mb-2">Title *</label>
+                            <input class="form-control" id="inputName" autocomplete="off" maxlength="150" required type="text" name="Title">
+                        </div>
+
+                        <div>
+                            <label for="inputAmount" class="mb-2">Amount</label>
+                            <input class="form-control" id="inputAmount" autocomplete="off" type="number" name="Amount">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mt-5 mb-0">
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                </div>
+
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+
+    <script type="text/javascript">
+        activeAdminMenu('#fees');
+    </script>
+}

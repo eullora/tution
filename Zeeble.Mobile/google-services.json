@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "803359470076",
+    "project_id": "zeeble-mobile",
+    "storage_bucket": "zeeble-mobile.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:803359470076:android:c7e63f41f6eb255f9d8279",
+        "android_client_info": {
+          "package_name": "com.zeeble.mobile"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA3bde5srScf6c1aVItP7yuLbMJCEgtvg4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

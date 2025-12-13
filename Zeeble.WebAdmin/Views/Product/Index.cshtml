@@ -1,0 +1,104 @@
+﻿@using Zeeble.Shared.Entities
+@{
+    ViewData["Title"] = "Products";
+    var rows = ViewData["Rows"] as IEnumerable<Product>;
+}
+@section Styles {
+    <partial name="_DataTableStyles" />
+}
+<div class="container-fluid">
+    <h3 class="mb-2">Products</h3>
+
+    <div class="row mt-3">
+        <div class="col-12 p-1">
+            <a href="~/product/add" class="btn btn-dark float-end">+</a>
+        </div>
+
+        <div class="col-12">
+            <table id="datatableProduct" class="table table-striped" style="width:100%">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Stock</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var row in rows)
+                    {
+                        <tr>
+                            <td id="title-@row.Id">@row.Title</td>
+                            <td align="center">@row.Stocks.Sum(x => x.Quantity)</td>
+                            <td align="right">
+                                <a class="btn btn-sm btn-primary stock" product-id="@row.Id" href="javascript:void(0);" title="Add Stock"><i class="fa-brands fa-stack-overflow"></i></a>
+                            </td>
+                        </tr>
+                    }
+
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade" id="stockModel" tabindex="-1" aria-labelledby="stockModelLabel" data-bs-keyboard="false" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Add Stock</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <input type="hidden" id="txtProductId" value="0" />
+                            <div class="mb-3">
+                                <h4 id="labelProductName"></h4>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="txtQuantity" class="form-label">Quantity</label>
+                                <input type="text" class="form-control" id="txtQuantity">
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <span id="message" class="text-danger"></span>
+                    <button type="button" id="btnAddStock" class="btn btn-primary">Submit</button>
+                </div>
+
+            </form>
+        </div>
+    </div>
+</div>
+
+
+@section Scripts {
+    <partial name="_DataTableJs" />
+    <script src="~/js/product.js"></script>
+
+    <script type="text/javascript">
+        activeAdminMenu('#products');
+
+        $(document).ready(function() {
+            new DataTable('#datatableProduct', {
+                ordering: false
+            });
+
+            $(".stock").on('click', function(){
+                var productId = $(this).attr('product-id');
+                loadStockModel(productId);
+            });
+
+            $("#btnAddStock").click(function () {
+                 addStock();
+            });
+
+        });
+    </script>
+}

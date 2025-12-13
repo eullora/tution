@@ -1,0 +1,29 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Zeeble.Mobile.InstructionPage" 
+              NavigationPage.HasNavigationBar="False" Shell.NavBarIsVisible="False"
+             BackgroundColor="#FFF" Title="Instructions">
+
+    <ScrollView>
+        <StackLayout Padding="10" Spacing="10" Margin="10">
+            <Button Text="x" TextColor="Black" 
+          FontSize="Large"
+          BackgroundColor="Transparent" Clicked="ButtonClose_Clicked" HorizontalOptions="End"></Button>
+            
+            <Label Text="" x:Name="LabelExamName"  TextColor="Gray"  FontFamily="NotoSerifBold" FontSize="20"/>
+        
+            <Frame BackgroundColor="White" BorderColor="LightGray" >
+                <Label Text="" x:Name="LabelInstructios"  TextColor="Black"  TextType="Html"  Padding="5"></Label>
+            </Frame>
+       
+        <Button BackgroundColor="Black" TextColor="White" Text="Start Test" IsVisible="False" x:Name="ButtonStart" Clicked="ButtonStart_Clicked"></Button>
+        
+            <Label TextColor="Black" Text="" IsVisible="False" x:Name="LabelMessage" HorizontalOptions="CenterAndExpand"></Label>
+
+        </StackLayout>
+     </ScrollView>
+
+</ContentPage>
+
+    

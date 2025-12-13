@@ -1,0 +1,19 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Zeeble.Mobile.FlashCardsPage" 
+             xmlns:models="clr-namespace:Zeeble.Mobile.Models"     
+             xmlns:ce ="clr-namespace:Zeeble.Mobile.CustomControls"
+             BackgroundColor="#FFF">
+    
+    <ScrollView>
+        <VerticalStackLayout Padding="16">
+            <Label 
+                Text="Flash Cards" Margin="0,10,50,10" TextColor="Gray" FontFamily="NotoSerifBold" FontSize="25"/>
+
+            <ce:CustomPicker x:Name="SubjectPicker" TextColor="Black"  BackgroundColor="White"></ce:CustomPicker>
+
+        </VerticalStackLayout>
+    </ScrollView>
+
+</ContentPage>

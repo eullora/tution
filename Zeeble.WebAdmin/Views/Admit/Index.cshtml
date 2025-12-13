@@ -1,0 +1,189 @@
+﻿@using Zeeble.Shared.Entities
+@{
+    ViewData["Title"] = "Admission";
+    var standardOptions = ViewData["StandardRows"] as IEnumerable<Standard>;    
+    var batches = ViewData["BatchRows"] as IEnumerable<Batch>;
+    var row = ViewData["EnquiryRow"] as Enquiry;
+    var enquiryId = row == null ? 0 : row.Id;
+}
+@section Styles {
+    <link rel="stylesheet" type="text/css" href="~/css/lib/jquery.datetimepicker.min.css" />
+}
+<div class="container">
+    <div class="row">
+        <h3 class="mt-2 mb-3">Admission Form</h3>
+
+        <div class="col-lg-12">
+            <form asp-controller="admit" asp-action="add" method="post">
+                <div class="row mb-3">
+                    <div class="col-6">
+                        <div class="row">
+                            <div class="col-md-12 mt-3">
+                                <label for="inputFullName" class="mb-2">Student Full Name*</label>
+                                <input class="form-control" id="inputFullName" autocomplete="off" maxlength="20" required type="text" name="FullName" value="@row?.FullName">
+                            </div>
+
+                            <div class="col-md-12 mt-3">
+                                <label for="inputParentMobile" class="mb-2">Parent Mobile *</label>
+                                <input class="form-control" id="inputParentMobile" autocomplete="off" maxlength="10" required type="text" name="ParentMobile" value="@row?.ParentMobile">
+                            </div>
+
+                            <div class="col-md-12 mt-3">
+                                <label for="selectGender" class="mb-2">Gender *</label>
+                                <select class="form-select" id="selectGender" name="GenderId" required>
+                                    <option value=""></option>
+                                    <option value="M">Male</option>
+                                    <option value="F">Female</option>
+                                </select>
+                            </div>
+
+                            <div class="col-md-12 mt-3">
+                                <label for="selectStandardId" class="mb-2">Standard *</label>
+                                <select class="form-select" id="selectStandardId" name="StandardId"  required>
+                                    <option value=""></option>
+                                    @foreach (var standard in standardOptions)
+                                    {
+                                        <option value="@standard.Id">
+                                            @standard.Name
+                                        </option>
+                                    }
+                                </select>
+                            </div>
+
+                        </div>
+                    </div>
+                    <input type="hidden" value="@enquiryId" name="EnquiryId" />
+
+                    <div class="col-6">
+                        <div class="row">
+                            <div class="col-md-12 mt-3">
+                                <label for="inputAddress" class="mb-2">Address</label>
+                                <input class="form-control" autocomplete="off" id="inputAddress"  maxlength="150" required type="text" name="Address" value="@row?.Address">
+                            </div>
+                            <div class="col-md-12 mt-3">
+                                <label for="inputStudentMobile" class="mb-2">Student Mobile</label>
+                                <input class="form-control" autocomplete="off" id="inputStudentMobile" maxlength="10" required type="text" name="StudentMobile" value="@row?.StudentMobile">
+                            </div>
+
+                            <div class="col-md-12 mt-3">
+                                <label for="selectCast" class="mb-2">Cast *</label>
+                                <select class="form-select" id="selectCast" name="Cast" required>
+                                    <option value="Open">Open</option>
+                                    <option value="SC">SC</option>
+                                    <option value="VJ">VJ</option>
+                                    <option value="NT2">NT2</option>
+                                    <option value="SBC">SBC</option>
+                                    <option value="OBC">OBC</option>
+                                    <option value="ST">ST</option>
+                                    <option value="N1">N1</option>
+                                    <option value="NT3">NT3</option>
+                                    <option value="EBC">EBC</option>
+                                    <option value="Other">Other</option>
+                                </select>
+                            </div>
+
+                            <div class="col-md-12 mt-3">
+                                <label for="txtSchool" class="mb-2">School *</label>
+                                <input class="form-control " id="txtSchool" autocomplete="off" name="SchoolName" value="@row?.SchoolName">
+                            </div>
+
+                        </div>
+                    </div>
+
+
+                    <div class="col-md-12">                   
+                        <div class="row">
+                            <div class="col-md-4 mt-3">
+                                <label for="selectBatch" class="mb-2">Batch *</label>
+                                <select class="form-select" id="selectBatch" name="BatchId">
+                                    <option value=""></option>
+                                    @foreach (var batch in batches)
+                                    {
+                                        <option value="@batch.Id">@batch.Title</option>
+                                    }
+                                </select>
+                            </div>
+
+                            <div class="col-md-4 mt-3 fee-detail">
+                                <label for="inputFees" class="mb-2">Fees</label>
+                                <input class="form-control" id="inputFees" autocomplete="off" maxlength="25" readonly type="text">
+                            </div>
+
+                            <div class="col-md-4 mt-3 fee-detail">
+                                <label for="inputDiscount" class="mb-2">Discount</label>
+                                <input class="form-control" id="inputDiscount" autocomplete="off" maxlength="25" type="text" name="Discount">
+                            </div>
+                        </div>
+                    </div>
+                    <h5 class="mt-3">Installments</h5>
+                    <div class="col-md-12 mt-3">
+
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="row">
+                                   
+
+                                    <div class="col-md-12 mt-4">
+
+                                        <table class="table">
+                                            <thead>
+                                                <tr>
+                                                    <th width="40%"></th>
+                                                    <th>Date</th>
+                                                    <th>Amount</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td>Installment 1</td>
+                                                    <td><input type="text" autocomplete="off" required class="form-control installment-date" name="FirstInstallmentDate" /></td>
+                                                    <td><input type="number" autocomplete="off" required class="form-control" id="txtFirstInstallment" name="FirstInstallmentAmount" /></td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Installment 2</td>
+                                                    <td><input type="text" autocomplete="off" class="form-control installment-date" name="SecondInstallmentDate" /></td>
+                                                    <td><input type="number" autocomplete="off" class="form-control" id="txtSecondInstallment" name="SecondInstallmentAmount" /></td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Installment 3</td>
+                                                    <td><input type="text" autocomplete="off" class="form-control installment-date" name="ThirdInstallmentDate" /></td>
+                                                    <td><input type="number" autocomplete="off" class="form-control" id="txtThirdInstallment" name="ThirdInstallmentAmount" /></td>
+                                                </tr>                                               
+                                            </tbody>
+                                            <tfoot>
+                                                <tr>
+                                                    <td colspan="2" align="right" class="fw-bold">Total</td>
+                                                    <td><span id="spanTotal"></span></td>
+                                                </tr>
+                                            </tfoot>
+                                        </table>
+
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                       
+                    </div>
+                    <div class="col-md-12">
+                        <div class="mt-4 mb-0">
+                            <button type="submit" class="btn btn-primary float-end">Submit</button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+
+    <script type="application/json" id="batchScript">@Html.Raw(ViewData["BatchJson"].ToString())</script>
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.8.11/jquery-ui.min.js"></script>
+    <script src="~/js/lib/jquery.datetimepicker.full.js"></script>
+    <script src="~/js/admit.js" asp-append-version="true"></script>
+    <script type="text/javascript">
+        activeAdminMenu('#counselling');
+        $('#selectStandardId').val('@row?.StandardId');
+    </script>
+}

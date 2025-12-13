@@ -1,0 +1,56 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Zeeble.Mobile.FeesPage"   
+             Shell.TitleColor="Gray"  
+             BackgroundColor="#FFF"
+             Shell.BackgroundColor="#FFF"      
+             Shell.ForegroundColor="Gray"
+             Title="Fees">
+    
+    <ScrollView>
+        <StackLayout >
+            <ActivityIndicator Color="Gray" x:Name="LoadingIndicator" IsRunning="True" HeightRequest="35" VerticalOptions="Center" HorizontalOptions="Center" IsVisible="True"></ActivityIndicator>
+            <Label  x:Name="LableName" Margin="10,0,0,10" FontFamily="NotoSerifBold" TextColor="Black"   FontSize="18"/>
+            <Label  x:Name="LableBatch" Margin="10,1,0,10" FontFamily="NotoSerifBold" TextColor="Gray"   FontSize="14"/>
+
+            <!--<StackLayout>
+                <ListView x:Name="ListViewDetails" SelectionMode="None" SeparatorColor="White" 
+                          HorizontalScrollBarVisibility="Never" VerticalScrollBarVisibility="Never"                          
+                          BackgroundColor="Beige" IsPullToRefreshEnabled="False"  HasUnevenRows="True">
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <ViewCell>
+                                <StackLayout Padding="8">
+                                    <Label Text="{Binding .}"   TextColor="Black" FontFamily="NotoSerif"/>
+                                </StackLayout>
+                            </ViewCell>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+            </StackLayout>-->
+            
+            <!--<Label  Text="Payments" Margin="10,10,0,5" FontFamily="NotoSerifBold" TextColor="Gray"   FontSize="16"/>-->
+            <StackLayout>
+                <ListView x:Name="ListViewPayments" SelectionMode="None" BackgroundColor="White" SeparatorColor="LightGray" IsPullToRefreshEnabled="False" 
+                          
+                          HorizontalScrollBarVisibility="Never" VerticalScrollBarVisibility="Never"
+                      HasUnevenRows="True">
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <ViewCell>
+                                <StackLayout  Padding="10" Spacing="5" VerticalOptions="StartAndExpand">
+                                    <Label Text="{Binding Title}"  TextColor="Black" FontAttributes="Bold"/>
+                                    <Label Text="{Binding DueDate, StringFormat='Due date {0:dd/MM/yyyy}'}" HorizontalOptions="Start"  TextColor="Black"/>
+                                    <Label Text="{Binding DueAmount, StringFormat='Amount {0}/-'}"  TextColor="Black" HorizontalOptions="Start"/>
+                                    <Label Text="Pending" FontSize="10" FontAttributes="Bold" TextColor="Red" HorizontalOptions="End"/>
+                                </StackLayout>
+                            </ViewCell>
+
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+            </StackLayout>
+        </StackLayout>
+    </ScrollView>
+</ContentPage>

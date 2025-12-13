@@ -1,0 +1,74 @@
+﻿@using Zeeble.Shared.Entities
+@{
+    ViewData["Title"] = "Attendance";
+    var rows = ViewData["Rows"] as IEnumerable<Present>;
+}
+@section Styles {
+    <partial name="_DataTableStyles" />
+}
+<div class="container-fluid">
+    <h3 class="mb-2">Attendance</h3>
+
+    <div class="row mt-3">
+        <div class="col-12 p-1">
+            <a href="~/attendance/add" class="btn btn-dark float-end">+</a>
+        </div>
+
+        <div class="col-12">
+            <table id="datatableAttendance" class="table table-striped" style="width:100%">
+                <thead>
+                    <tr>
+                        <th>File Name</th>
+                        <th>Date</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var row in rows)
+                    {
+                        <tr>
+                            <td>@row.FileName</td>
+                            <td>@row.CreatedOn.ToString("dd/MM/yyyy")</td>
+                            <td align="right">
+                                <a href="javascript:void(0);" class="btn btn-primary view-attendance" itemid="@row.Id">View</a>
+                                <a href="~/attendance/delete?id=@row.Id" class="btn btn-danger">Delete</a>
+                            </td>
+                        </tr>
+                    }
+
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="attendanceModel" tabindex="-1" data-bs-keyboard="false" aria-hidden="true">
+    <div class="modal-dialog modal-xl modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-12 attendance-table" id="attendanceTable">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section Scripts {
+    <partial name="_DataTableJs" />
+    <script src="~/js/attendance.js"></script>
+    <script type="text/javascript">
+        activeAdminMenu('#attendance');
+        new DataTable('#datatableAttendance', {
+            ordering: false
+        });
+
+
+    </script>
+}

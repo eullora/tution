@@ -1,0 +1,67 @@
+﻿@using Zeeble.Shared.Entities
+@{
+    ViewData["Title"] = "Users";
+    var rows = ViewData["Rows"] as IEnumerable<User>;
+}
+@section Styles{
+    <partial name="_DataTableStyles" />
+}
+<div class="container-fluid">
+    <h3 class="mb-2">Users</h3>
+    
+    <div class="row mt-3">
+        <div class="col-12 p-1">
+            <a href="~/users/add" class="btn btn-dark float-end">+</a>
+        </div>
+
+        <div class="col-12">
+            <table id="datatableUsers" class="table table-striped" style="width:100%">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Role</th>                        
+                        <th></th>                        
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var row in rows)
+                    {
+                        <tr>
+                            <td>@row.FullName</td>
+                            <td>@row.Email</td>
+                            <td>@row.Role.Title</td>
+                            <td>@(row.IsActive ? "Active" : "Disabled")</td>
+                            <td align="right">
+                                @if(row.IsActive)
+                                {
+                                    <a class="btn btn-sm btn-danger" href="~/users/delete?id=@row.Id">Disable</a>
+                                }
+                                else
+                                {
+                                    <a class="btn btn-sm btn-dark" href="~/users/activate?id=@row.Id">Activate</a>
+                                }
+                                
+                            </td>
+                        </tr>
+                    }
+
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+
+@section Scripts {
+    <partial name="_DataTableJs" />
+
+    <script type="text/javascript">
+        activeAdminMenu('#users');
+        new DataTable('#datatableUsers', {
+            ordering: false
+            });
+
+    </script>
+}

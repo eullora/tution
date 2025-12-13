@@ -1,0 +1,418 @@
+﻿@page "/scanning"
+@using MauiApp1.Models
+@using MauiApp1.Services
+@using MauiApp1.Utils
+@using Newtonsoft.Json
+@using System.Text
+@inject IServiceProvider Services
+@inject IJSRuntime JS
+@inject HttpClient Http
+@inject IOmrScanningService ScanningService
+@inject NavigationManager NavigationManager
+
+<div class="main-container">
+    <div class="content-row">
+
+        @if(Items == null)
+        {
+            <em>Loading...</em>            
+        }
+        else
+        {
+            <div class="row-list">
+
+                @foreach (var item in Items)
+                {
+                    <div class="row-item" @onclick="() => SelectItem(item)">
+                        <div>@item.Name @item.EndDate.ToString("dd.MM.yyyy")</div>
+                        <small>@item.Batches</small>
+                    </div>
+                }
+            </div>
+
+            <div class="row-details">
+                @if (SelectedItem != null)
+                {
+                    <div class="row bg-light border">
+                        <div class="col-md-12 p-2 text-center">
+                            <h5 class="fw-bold">@SelectedItem.Name </h5>
+                            <div>
+                                <span class="fw-bold">Batches: @SelectedItem.Batches,</span>
+                                <span>Exam Type - @SelectedItem.ExamType |  Subjects - @SelectedItem.Subjects | Question Count: @SelectedItem.QuestionCount | Marks: @SelectedItem.Marks </span>    
+                            </div>
+                            
+
+                        </div>
+                    </div>
+                }
+
+                <div class="row mt-3 @displayNone">
+
+                    <div class="col-md-9">
+                        <input type="text" class="form-control w-100" readonly placeholder="Select OMR image directory" value="@selectedPath" />
+                    </div>
+                    <div class="col-md-3">
+                        <button class="btn btn-primary float-start w-100" @onclick="PickFolder">Browse</button>
+                    </div>
+
+                    <div class="col-md-9 mt-3">
+                        <input type="text" class="form-control w-100" value="@selectedAnswerFilePath" readonly placeholder="Select answer sheet"/>
+                    </div>
+                    <div class="col-md-3 mt-3">
+                        <button class="btn btn-primary float-start w-100"  @onclick="PickAnswerSheet">Browse</button>
+                    </div>
+
+                    <div class="col-md-12 mt-3">
+                        @if (csvData is not null)
+                        {
+                            <div class="d-flex flex-wrap">
+                                @foreach (var row in csvData)
+                                {
+                                    <div class="grid-answer-sheet">@row</div>
+                                }
+                            </div>
+                        }
+                    </div>
+
+                    <div class="col-md-12 mt-3">
+                        <button class="btn btn-dark m-1" disabled="@isDisabled" @onclick="StartScanning">Start Scanning</button>                      
+                    </div>
+
+                    <div class="col-md-12 mt-2">
+                        <div class="text-center mb-2">
+                            <div><em>@currentFileNameAndCounter</em></div>                                            
+                        </div>
+
+                        <div class="log-viewer @showAllClass">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>Roll No.</th>
+                                        <th>Answer Sheet</th>                                       
+                                        <th>
+                                            <button class="btn btn-danger m-1 float-end" @onclick="ResetTestResult">Reset</button>
+                                            <button class="btn btn-primary m-1 float-end" @onclick="SubmitResult">Submit Result</button>
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var line in outputLines)
+                                    {
+                                        <tr>
+                                            <td valign="middle">@line.RollNumber</td>                                            
+                                            <td colspan="2" valign="middle">
+                                                <span>@line.MarksLabel</span>
+                                                <span  class="float-end">@line.UploadStatus</span>
+                                            </td>                                            
+                                        </tr>                                   
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+@code {
+
+    private List<ExamListModel> Items = null;
+    private ExamListModel SelectedItem;
+    private string selectedAnswerFilePath;
+    private string selectedPath;
+    private string displayNone = "d-none";
+    private bool isDisabled= true;
+    private List<OmrResultModel> outputLines = new();
+    private bool isRunning = false;
+    private ElementReference consoleDiv;
+    private int fileCount = 0;    
+    private string currentFileNameAndCounter;
+    private List<string>? csvData;
+    private string showAllClass = "d-none";
+    private SettingModel _settings;
+    private bool isRequestedStop = false;
+    private string resultJson;
+
+    private void SelectItem(ExamListModel item)
+    {
+        SelectedItem = item;
+        selectedPath = null;
+        isDisabled = true;
+        displayNone = null;
+        selectedAnswerFilePath = null;
+        csvData = null;
+        _settings = Utility.LoadSetting();
+        var path = $"{_settings.OutputPath}\\{SelectedItem.Id}";
+         outputLines.Clear();
+        if (Directory.Exists(path))
+        {
+            currentFileNameAndCounter = "Loading results.. Please wait";
+            var answerfilePath = $"{_settings.OutputPath}{SelectedItem.Id}\\{SelectedItem.Id}_answer_sheet.csv";
+            csvData =  ReadCsv(answerfilePath );
+
+            var files = Directory.GetFiles(path,"*.json");
+            foreach(var file in files)
+            {                
+                var data = File.ReadAllText(file);
+                AppendOutput(JsonConvert.DeserializeObject<OmrResultModel>(data));
+            }
+
+            currentFileNameAndCounter = "";
+            showAllClass = "";
+        }        
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        Items = await Http.GetFromJsonAsync<List<ExamListModel>>("api/exams/offline/1/true");
+    }
+
+    private async Task PickAnswerSheet()
+    {
+#if WINDOWS
+        selectedAnswerFilePath = null;
+        csvData = null;
+        var picker = new Windows.Storage.Pickers.FileOpenPicker();
+        var hwnd = ((MauiWinUIWindow)App.Current.Windows[0].Handler.PlatformView).WindowHandle;
+        WinRT.Interop.InitializeWithWindow.Initialize(picker, hwnd);
+
+        picker.FileTypeFilter.Add("*");
+        var file = await picker.PickSingleFileAsync();
+        if (file != null)
+        {
+            selectedAnswerFilePath = file.Path;
+            csvData = ReadCsv(selectedAnswerFilePath);
+        }
+
+        if(!string.IsNullOrEmpty(selectedPath) && !string.IsNullOrEmpty(selectedAnswerFilePath))
+        {
+            isDisabled = false;
+        }
+#endif
+    }
+
+    private async Task PickFolder()
+    {
+#if WINDOWS
+        isDisabled = true;
+        selectedPath = null;        
+        var picker = Services.GetService<FolderPickerService>();
+        selectedPath = await picker.PickFolderAsync();
+
+        if(!string.IsNullOrEmpty(selectedPath) && !string.IsNullOrEmpty(selectedAnswerFilePath))
+        {
+            isDisabled = false;
+        }
+#endif
+
+    }
+
+    private List<string> ReadCsv(string filePath)
+    {
+        var lines = File.ReadAllLines(filePath);
+        return lines.ToList();        
+    }
+
+   private async Task StartScanning()
+        {
+    
+            outputLines.Clear();
+            isRunning = true;
+            isDisabled = true;
+
+            var files = Directory.GetFiles(selectedPath, "*.jpg");            
+            fileCount = files.Length;
+
+            if(fileCount == 0){
+                currentFileNameAndCounter = "Please select the correct scanned OMR image directory";
+                return;
+            }
+            _settings = Utility.LoadSetting();   
+
+            int cnt = 1;
+
+            
+            var directory = Path.Combine(_settings.OutputPath, $"{SelectedItem.Id}");
+            if (!Directory.Exists(directory))
+            {
+                Directory.CreateDirectory(directory);
+            }
+            showAllClass = "";
+
+            File.Copy(selectedAnswerFilePath, Path.Combine(directory, $"{SelectedItem.Id}_answer_sheet.csv"));            
+            var answerSheetList = new List<AnswerSheetModel>();
+            
+            foreach(var csv in csvData)
+            {
+                var arry = csv.Split(',');
+                answerSheetList.Add(new AnswerSheetModel{
+                    SubjectCode = arry[0],
+                    QuestionNumber = Convert.ToInt32(arry[1]),
+                    CorrectAnswer= arry[2],
+                    QuestionLabel = $"q{arry[1]}"
+                });
+            }            
+            var answerSheet = new List<QuestionAnswerKeyPair>();
+            var subjectMarks  = new List<SubjectMarksModel>();
+            foreach(var file in files)
+            {                 
+                answerSheet.Clear();
+                subjectMarks.Clear();
+
+                if(isRequestedStop)
+                {
+                    break;
+                }
+
+                currentFileNameAndCounter = $"Processing - {cnt}/{fileCount}";
+                var output  = await ScanningService.ScanOmrSheetAsync(_settings.OmrEnginePath, file,_settings.TemplatePath);                
+
+                if(!string.IsNullOrEmpty(output))
+                {
+                    var sheetModel = JsonConvert.DeserializeObject<OmrResultModel>(output); 
+                    if(sheetModel.Code == 0)
+                    {                   
+                        foreach(var sh in sheetModel.Sheet)
+                        {
+                            var usrAnswer = sh.Split('-');
+                            answerSheet.Add(new QuestionAnswerKeyPair{
+                                QuestionLabel = usrAnswer[0],
+                                UserAnswer = usrAnswer[1],
+                            });
+                        }   
+                                           
+                        foreach(var ans in answerSheetList)
+                        {
+                           var item = answerSheet.Find(m => m.QuestionLabel == ans.QuestionLabel);
+                           var markItem = new SubjectMarksModel{
+                                Marks =  0,
+                                SubjectName = ans.SubjectCode,
+                                Label = item.QuestionLabel
+                           };
+
+                           if(item != null)
+                           {
+                              if(item.UserAnswer == ans.CorrectAnswer)
+                              {
+                                  markItem.Marks =  4;                                
+                                  markItem.Remark = "C";
+                              }
+                              else
+                              {
+                                  markItem.Remark = "X";
+                              }
+                           }
+                           else
+                           {
+                                  markItem.Remark = "N";
+                           }
+                           
+                           subjectMarks.Add(markItem);
+                        }
+
+                        sheetModel.MarksLabel = string.Join(", ",
+                                                        subjectMarks
+                                                    .GroupBy(sm => sm.SubjectName)
+                                                    .Select(g => $"{g.Key} {g.Sum(x => x.Marks)}"));
+                        sheetModel.SubjectMarks = subjectMarks;                                 
+                        await ScanningService.WriteResultToFile($"{directory}\\{sheetModel.RollNumber}.json",JsonConvert.SerializeObject(sheetModel));
+                        AppendOutput(sheetModel);
+                        //File.Move(file, Path.Combine(directory, $"{SelectedItem.Id}_{sheetModel.RollNumber}.jpg"));
+                    }
+
+                    else
+                    {
+                        //AppendOutput(null);                    
+                    }
+                }
+
+                else
+                {                                            
+                    //AppendOutput($"<div class='grid-box-error'></div>");                    
+                }
+                
+                await Task.Delay(100);
+                cnt++;
+            }
+
+            currentFileNameAndCounter ="Finished";
+           
+            isDisabled = false;
+  
+
+        }
+
+    private void ResetTestResult()
+    {        
+        Directory.Delete($"{_settings.OutputPath}\\{SelectedItem.Id}",true);         
+        csvData = null;
+        outputLines.Clear();
+        showAllClass = "d-none";
+        selectedAnswerFilePath = null;
+        selectedPath = null;
+        currentFileNameAndCounter = "";
+        isDisabled = true;
+    }
+
+    private async Task ScrollToBottomAsync()
+    {
+        if (consoleDiv.Context != null)
+        {
+            await JS.InvokeVoidAsync("scrollToBottom", consoleDiv);
+        }
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            await JS.InvokeVoidAsync("setBodyClass", "no-scroll");
+        }
+    }
+
+    private async Task SubmitResult()
+    {
+       var path = $"{_settings.OutputPath}\\{SelectedItem.Id}";
+       currentFileNameAndCounter = "Submitting result.. Please wait";
+       foreach(var item in outputLines)
+       {
+            item.UploadStatus = "{uploading}";            
+            var results = item.SubjectMarks.GroupBy(sm => sm.SubjectName).Select(g => new {
+                 Code = g.Key,
+                 Marks = g.Sum(x => x.Marks)
+            });
+            
+            var result = await Http.PostAsync($"api/exams/result/{SelectedItem.Id}/rollnumber/{item.RollNumber}", new StringContent(JsonConvert.SerializeObject(results),Encoding.UTF8, "application/json"));
+            if(result.IsSuccessStatusCode)
+            {
+                item.UploadStatus = "{Ok}";
+            }
+       } 
+
+       currentFileNameAndCounter = "Result uploaded successfully.. Please wait";
+       await Task.Delay(1000);
+       NavigationManager.NavigateTo("/result");
+    }
+
+    private void AppendOutput(OmrResultModel result)
+    {
+        InvokeAsync(async () =>
+        {
+            outputLines.Add(result);            
+            await ScrollToBottomAsync();
+            StateHasChanged();
+        });
+    }
+
+   private void ScriptFinished()
+    {
+        InvokeAsync(() =>
+        {
+            isRunning = false;
+            StateHasChanged();
+        });
+    }
+
+}

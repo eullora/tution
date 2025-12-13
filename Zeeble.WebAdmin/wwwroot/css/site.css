@@ -1,0 +1,41 @@
+
+.btn-kcc-blue {
+    background: #040d5b;
+    color: #fff
+}
+
+.kcc-blue {
+    background: #040d5b;
+    color: #fff;
+    border:none
+}
+
+.kcc-red {
+    background: #ff0000;
+    color: #fff;
+    border:none;
+}
+
+.sb-sidenav-menu {
+   
+    background:#000;
+    border-right: 2px solid #808080
+
+}
+.chart-container {
+    position: relative;
+    height: 25vh;
+    width: 100%;
+}
+.enquiry-form-bg {
+    background-color: #D7F5E9!important
+}
+.sb-topnav {
+    border-bottom: 2px solid #808080!important
+}
+
+.attendance-table{
+    max-height:550px;
+    overflow-x:hidden;
+    overflow-y:auto;
+}

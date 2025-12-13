@@ -1,0 +1,58 @@
+﻿@using Zeeble.Shared.Entities
+@{
+    ViewData["Title"] = "Fees";
+    var rows = ViewData["Rows"] as IEnumerable<Fee>;
+}
+@section Styles {
+    <partial name="_DataTableStyles" />
+}
+<div class="container-fluid">
+    <h3 class="mb-2">Fees</h3>
+
+    <div class="row mt-3">
+        <div class="col-12 p-1">
+            <a href="~/fee/add" class="btn btn-dark float-end">+</a>
+        </div>
+
+        <div class="col-12">
+            <table id="datatableFee" class="table table-striped" style="width:100%">
+                <thead>
+                    <tr>
+                        <th>Title</th>
+                        <th>Amount</th>
+                        <th></th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var row in rows)
+                    {
+                        <tr>
+                            <td id="title-@row.Id">@row.Title</td>
+                            <td align="center">@row.Amount</td>
+                            <td align="center">@(row.IsActive ? "Active" : "Disabled")</td>
+
+                            <td align="right">
+                                <a class="btn btn-sm btn-danger" href="~/fee/delete/@row.Id" title="Delete">Disable</a>
+                            </td>
+                        </tr>
+                    }
+
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_DataTableJs" />
+    <script type="text/javascript">
+        activeAdminMenu('#feestructure');
+
+        $(document).ready(function() {
+            new DataTable('#datatableFee', {
+                ordering: false
+            });
+        });
+    </script>
+}

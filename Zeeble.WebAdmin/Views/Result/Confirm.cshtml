@@ -1,0 +1,72 @@
+﻿@using Zeeble.Shared.Entities
+@{
+    ViewData["Title"] = "Confirm Result";
+    var rows = ViewData["Rows"] as IEnumerable<Result>;
+    var headers = ViewData["Headers"] as IEnumerable<string>;
+    var id = ViewData["ExamId"];
+}
+@section Styles {
+    <partial name="_DataTableStyles" />
+}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <h3 class="mb-2">Confirm Result</h3>
+            <div class="row mt-3">
+                <div class="col-12 mt-4">
+                    <table id="datatableConfirm" class="table table-striped" style="width:100%">
+                         <thead>
+                             <tr>
+                                @foreach(var header in headers)
+                                {
+                                    <th>@header</th>
+                                }
+                            </tr>
+                         </thead>
+
+                        <tbody>
+                            @foreach (var row in rows)
+                            {
+                                <tr>
+                                    <td>@row.Student.RollNumber</td>
+                                    <td>@row.Student.FullName</td>
+                                    @foreach (var mark in row.ResultSubjects)
+                                    {
+                                        <td>@mark.Marks</td>
+                                    }
+
+                                    <td>@row.Marks</td>                                    
+                                </tr>
+                            }
+
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="col-md-12 mt-3">
+                    <a class="btn btn-primary" href="~/result/upload?examId=@id">Confirm</a>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+</div>
+
+@section Scripts {
+
+    <partial name="_DataTableJs" />
+
+    <script type="text/javascript">
+        activeAdminMenu('#result');
+
+        $(document).ready(function () {
+
+            new DataTable('#datatableConfirm', {
+                ordering: false,
+                pageSize: 20
+            });
+        });
+
+    </script>
+}

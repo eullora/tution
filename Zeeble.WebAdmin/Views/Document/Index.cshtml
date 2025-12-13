@@ -1,0 +1,69 @@
+﻿@using Zeeble.Shared.Entities
+@{
+    ViewData["Title"] = "Documents";
+    var rows = ViewData["Rows"] as IEnumerable<Document>;
+}
+@section Styles {
+    <partial name="_DataTableStyles" />
+}
+<div class="container-fluid px-4">
+    <h3 class="mt-4 mb-2">Documents</h3>
+
+    <div class="row mt-3">
+        <div class="col-12 p-1">
+            <a href="~/document/add" class="btn btn-dark float-end">+</a>
+        </div>
+
+        <div class="col-12">
+            <table id="datatableDocuments" class="table table-striped" style="width:100%">
+                <thead>
+                    <tr>
+                        <th>Title</th>
+                        <th>Document Type</th>
+                        <th>Batch</th>                        
+                        <th>Subjects</th>                        
+                        <th>Created On</th>                        
+                        <th>File</th>                        
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var row in rows)
+                    {
+                        <tr>
+                            <td>@row.Title</td>
+                            <td>@row.DocumentType.Title</td>
+                            <td>
+                                @foreach(var btch  in row.DocumentBatches)
+                                {
+                                    <p>@btch.Batch.Title</p>
+                                }                                
+                            </td>                            
+                            
+                            <td>@string.Join(",", row.DocumentSubjects.Select(b=> b.Subject.Name))</td>                            
+                            <td>@row.CreatedOn.ToString("dd/MM/yyyy HH:mm")</td>                            
+                            <td><a href="#" title="@row.FileName">Download</a></td>                                
+                            <td align="right">
+                                <a class="btn btn-sm btn-danger" href="~/document/delete?id=@row.Id"><i class="fa-solid fa-trash-can"></i></a>
+                            </td>
+                        </tr>
+                    }
+
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+
+@section Scripts {
+    <partial name="_DataTableJs" />
+
+    <script type="text/javascript">
+        activeAdminMenu('#documents');
+        new DataTable('#datatableDocuments', {
+            ordering: false
+        });
+
+    </script>
+}

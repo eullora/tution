@@ -1,0 +1,50 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"  BackgroundColor="White"
+             x:Class="Zeeble.Mobile.LoginPage" NavigationPage.HasNavigationBar="False"
+               xmlns:ce ="clr-namespace:Zeeble.Mobile.CustomControls">
+
+    <ScrollView>
+        <StackLayout Padding="20" x:Name="MainContainer" Spacing="10"  IsVisible="True" VerticalOptions="Center">
+
+            <StackLayout  Spacing="10" Margin="0">
+
+                <ce:CustomEntry FontSize="18" x:Name="ParentPhoneEntry" BackgroundColor="LightGray" MaxLength="10"  Keyboard="Numeric"
+                    TextColor="Black" PlaceholderColor="LightGray" Placeholder="Parent Phone Number" />
+
+                <Button Text="Next"  x:Name="ButtonNext" Background="#000" Margin="0,10"  TextColor="White" Clicked="Next_Clicked"  />
+            </StackLayout>
+
+            <Frame CornerRadius="5" BorderColor="#E8E8E8" Padding="5" BackgroundColor="#F8F8F8" x:Name="FrameUserDetails" IsVisible="False">
+                <StackLayout Padding="2" Spacing="5" >
+                    <Frame HeightRequest="80" WidthRequest="80" CornerRadius="100" HorizontalOptions="Center" IsClippedToBounds="True" Padding="0"
+                               BorderColor="Gray" Margin="0,0,0,0">
+
+                        <Image Aspect="AspectFit" Source="user.png" VerticalOptions="Center" HorizontalOptions="Center" />
+                    </Frame>
+
+
+                    <Label x:Name="LabelName" HorizontalOptions="Center"  TextColor="Black" FontSize="Medium"></Label>
+                    <Label x:Name="LabelParentPhone" HorizontalOptions="Center" TextColor="Black" FontSize="Small"></Label>
+                    <Label x:Name="LabelBatch" HorizontalOptions="Center" TextColor="Black" FontSize="Small"></Label>
+                </StackLayout>
+                
+            </Frame>
+
+
+            <ce:CustomEntry x:Name="PinEntry" BackgroundColor="LightGray" MaxLength="6"
+                            FontSize="20"
+                            TextColor="Black" Margin="0,10" PlaceholderColor="LightGray" Placeholder="Pin"  
+                                Keyboard="Numeric" IsPassword="True" IsVisible="False" />
+
+            <ce:CustomEntry x:Name="ConfirmPinEntry" BackgroundColor="White" MaxLength="6" TextColor="Black"  IsVisible="False"
+                            FontSize="20" PlaceholderColor="LightGray" Placeholder="Confirm Pin"  Keyboard="Numeric" IsPassword="True" />
+
+            <Button Text="Login"  x:Name="ButtonLogin" Margin="0,5" Background ="#000"  TextColor="White" IsVisible="False"  Clicked="Login_Clicked"  />
+
+            <ActivityIndicator Color="Red" x:Name="LoginIndicator" HorizontalOptions="Center" IsRunning="False" IsVisible="False" Margin="10"></ActivityIndicator>
+
+        </StackLayout>
+    </ScrollView>
+
+</ContentPage>

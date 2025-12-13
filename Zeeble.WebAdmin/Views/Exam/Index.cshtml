@@ -1,0 +1,149 @@
+﻿@using Zeeble.Shared.Entities
+@{
+    ViewData["Title"] = "Exams";
+    var rows = ViewData["Rows"] as IEnumerable<Exam>;
+
+}
+@section Styles {
+    <partial name="_DataTableStyles" />
+}
+<div class="container-fluid">
+    <h3 class="mb-2">Exams</h3>
+
+    <div class="row">
+        <div class="col-12 p-1">
+            <a href="~/exam/add" class="btn btn-dark float-end">+</a>
+        </div>
+
+        <div class="col-12">
+
+            <nav>
+                <div class="nav nav-tabs" id="nav-tab" role="tablist">
+                    <button class="nav-link active tab-btn" id="nav-offline-tab" data-bs-toggle="tab" data-bs-target="#nav-offline" type="button" role="tab" aria-controls="nav-offline" aria-selected="true">Offline</button>
+                    <button class="nav-link tab-btn" id="nav-online-tab" data-bs-toggle="tab" data-bs-target="#nav-online" type="button" role="tab" aria-controls="nav-online" aria-selected="false">Online</button>
+                </div>
+            </nav>
+
+            <div class="tab-content" id="nav-tabContent">
+                <div class="tab-pane fade show active m-2" id="nav-offline" role="tabpanel" aria-labelledby="nav-offline-tab">
+                    <table id="datatableOfflineExams" class="table table-striped" style="width:100%">
+                        <thead>
+                            <tr>
+                                <th>Exam Name</th>
+                                <th>Batch</th>
+                                <th>Exam Type</th>
+                                <th>Stat Date</th>
+                                <th>End Date</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var row in rows)
+                            {
+                                if (row.ExamModeId == 1) continue;
+
+                                <tr>
+                                    <td>@row.Name</td>
+                                    <td>
+                                        @foreach (var btch in row.ExamBatches)
+                                        {
+                                            <p>@btch.Batch.Title</p>
+                                        }
+                                    </td>
+                                    <td>@row.ExamType.Name</td>
+                                    <td>@row.StartDate.ToString("dd/MM/yyyy HH:mm")</td>
+                                    <td>@row.EndDate.ToString("dd/MM/yyyy HH:mm")</td>
+                                    <td align="right">
+                                        <a class="btn btn-sm btn-primary" title="Question Paper" href="~/exam/paper?id=@row.Id"><i class="fa-solid fa-file-pdf"></i></a>
+
+                                        @if (!string.IsNullOrEmpty(row.ResultExcel))
+                                        {
+                                            <a class="btn btn-sm btn-info" title="Result" href="~/result?examId=@row.Id"><i class="fa-solid fa-chart-line"></i></a>
+                                        }
+                                        else
+                                        {
+                                            <a class="btn btn-sm btn-warning" title="Upload Result" href="~/result/add?examId=@row.Id"><i class="fa-solid fa-upload"></i></a>
+                                        }
+
+                                        <a class="btn btn-sm btn-danger" title="Delete" href="~/exam/delete?id=@row.Id"><i class="fa-solid fa-trash"></i></a>
+                                    </td>
+                                </tr>
+                            }
+
+                        </tbody>
+                    </table>
+
+                </div>
+
+                <div class="tab-pane fade m-2" id="nav-online" role="tabpanel" aria-labelledby="nav-online-tab">
+                    <table id="datatableOnlineExams" class="table table-striped" style="width:100%">
+                        <thead>
+                            <tr>
+                                <th>Exam Name</th>
+                                <th>Batch</th>
+                                <th>Exam Type</th>
+                                <th>Stat Date</th>
+                                <th>End Date</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var row in rows)
+                            {
+                                if (row.ExamModeId == 0) continue;
+
+                                <tr>
+                                    <td>@row.Name</td>
+                                    <td>
+                                        @foreach (var btch in row.ExamBatches)
+                                        {
+                                            <p>@btch.Batch.Title</p>
+                                        }
+                                    </td>
+                                    <td>@row.ExamType.Name</td>
+                                    <td>@row.StartDate.ToString("dd/MM/yyyy HH:mm")</td>
+                                    <td>@row.EndDate.ToString("dd/MM/yyyy HH:mm")</td>
+                                    <td align="right">
+                                        <a class="btn btn-sm btn-primary" title="Paper" href="~/exam/paper?id=@row.Id"><i class="fa-regular fa-file"></i></a>
+                                        <a class="btn btn-sm btn-info" title="Result" href="~/result?examId=@row.Id"><i class="fa-solid fa-chart-line"></i></a>
+                                        <a class="btn btn-sm btn-danger" title="Delete" href="~/exam/delete?id=@row.Id"><i class="fa-solid fa-trash"></i></a>
+                                    </td>
+                                </tr>
+                            }
+
+                        </tbody>
+                    </table>
+
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+@section Scripts {
+    <partial name="_DataTableJs" />
+
+    <script type="text/javascript">
+        $('#exam').addClass('active');
+        new DataTable('#datatableOfflineExams', {
+            ordering: false
+        });
+        new DataTable('#datatableOnlineExams', {
+            ordering: false
+        });
+
+        var mode = '@ViewData["Mode"]';
+
+        if(mode > 0){
+            $('.tab-pane').removeClass('active');
+            $('.tab-btn').removeClass('active');
+
+            $('#nav-online-tab').addClass('active');
+            $('#nav-online').addClass('show');
+            $('#nav-online').addClass('active');
+        }
+    </script>
+}

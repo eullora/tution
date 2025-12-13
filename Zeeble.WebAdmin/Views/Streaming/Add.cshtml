@@ -1,0 +1,63 @@
+﻿@using Zeeble.Shared.Entities
+@{
+    ViewData["Title"] = "Add Video";
+    var batches = ViewData["Batches"] as IEnumerable<Batch>;    
+}
+@section Styles {
+    <partial name="_Select2Css" />
+}
+
+<div class="container">
+    <div class="row justify-content-center">
+        <h3 class="mt-4 mb-5">Add Video</h3>
+        
+        <div class="col-lg-12 mt-3">
+            <form asp-controller="streaming" asp-action="add" method="post">
+
+                <div class="row mb-3">                    
+
+                    <div class="col-md-12 mt-3">
+                        <label for="inputName" class="mb-2">Title *</label>
+                        <input class="form-control" id="inputName" autocomplete="off"  maxlength="150" required type="text" name="Title">
+                    </div>
+
+
+                    <div class="col-md-12 mt-3">
+                        <label for="inputUrl" class="mb-2">URL *</label>
+                        <input class="form-control" id="inputUrl" autocomplete="off" maxlength="150" required type="text" name="URL">
+                    </div>
+                   
+                    <div class="col-md-12 mt-3">
+                        <label for="selectBatch" class="mb-2">Batch *</label>
+                        <select class="form-select" id="selectBatch" multiple required name="BatchIds">
+                            <option value=""></option>
+                            @foreach (var batch in batches)
+                            {
+                                <option value="@batch.Id">@batch.Title</option>
+                            }
+                        </select>
+                    </div>
+
+                </div>
+
+                <div class="mt-4 mb-0">
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                </div>
+
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+
+    <partial name="_Select2Js" />
+    <script type="text/javascript">
+      activeAdminMenu('#videos');
+
+      $(document).ready(function() {
+         $( '#selectSubject' ).select2( {theme: "bootstrap-5" });
+         $( '#selectBatch' ).select2( {theme: "bootstrap-5" });                  
+        });
+    </script>
+}

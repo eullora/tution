@@ -1,0 +1,39 @@
+﻿@using Zeeble.Shared.Entities
+@{
+    ViewData["Title"] = "Exam Paper";
+    var questions = ViewData["PaperModel"] as IEnumerable<QuestionModel>;
+    var cnt = 1;
+}
+
+<div class="container-fluid">
+    <h2 class="mb-3">@ViewData["ExamTitle"] Question Paper (@questions.Count())</h2>
+
+    <div class="row">
+        @foreach (var ques in questions)
+        {
+            <div class="col-md-4 p-1" id="@ques.Id">
+                <div class="card shadow h-100">
+                    <div class="card-header">
+                       <b>#@cnt</b> <span >@ques.SubjectName</span>
+                    </div>
+                    <div class="card-body">
+                        <img src="@ques.ImageData" class="img-fluid" />
+                    </div>
+                    <div class="card-footer">
+                        Answer: @ques.CorrectAnswer
+                    </div>
+                </div>
+            </div>
+            cnt = cnt + 1;
+        }
+    </div>
+</div>
+
+
+@section Scripts {
+
+    <script type="text/javascript">
+        activeAdminMenu('#exam');
+
+    </script>
+}

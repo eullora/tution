@@ -1,0 +1,82 @@
+{
+  "pageDimensions": [2480, 3508],
+  "bubbleDimensions": [44, 44],
+  "fieldBlocks": {
+    "q1_30_block": {
+      "origin": [260, 1473],
+      "bubblesGap": 63,
+      "labelsGap": 60,
+      "fieldLabels": ["q1..30"],
+      "fieldType": "QTYPE_MCQ4"
+    },
+    "q31_60_block": {
+      "origin": [618, 1473],
+      "bubblesGap": 63,
+      "labelsGap": 60,
+      "fieldLabels": ["q31..60"],
+      "fieldType": "QTYPE_MCQ4"
+    },
+    "q61_90_block": {
+      "origin": [978, 1473],
+      "bubblesGap": 63,
+      "labelsGap": 60,
+      "fieldLabels": ["q61..90"],
+      "fieldType": "QTYPE_MCQ4"
+    },
+    "q91_120_block": {
+      "origin": [1339, 1473],
+      "bubblesGap": 63,
+      "labelsGap": 60,
+      "fieldLabels": ["q91..120"],
+      "fieldType": "QTYPE_MCQ4"
+    },
+    "q121_150_block": {
+      "origin": [1698, 1473],
+      "bubblesGap": 63,
+      "labelsGap": 60,
+      "fieldLabels": ["q121..150"],
+      "fieldType": "QTYPE_MCQ4"
+    },
+    "q151_180_block": {
+      "origin": [2061, 1473],
+      "bubblesGap": 63,
+      "labelsGap": 60,
+      "fieldLabels": ["q151..180"],
+      "fieldType": "QTYPE_MCQ4"
+    },
+    "roll_number_digits": {
+      "origin": [196, 690],
+      "bubblesGap": 63,
+      "labelsGap": 60,
+      "fieldLabels": [
+        "roll1",
+        "roll2",
+        "roll3",
+        "roll4",
+        "roll5",
+        "roll6",
+        "roll7",
+        "roll8",
+        "roll9",
+        "roll10"
+      ],
+      "fieldType": "QTYPE_INT_FROM_1"
+    }
+  },
+  "customLabels": {
+    "RollNumber": [
+      "roll1",
+      "roll2",
+      "roll3",
+      "roll4",
+      "roll5",
+      "roll6",
+      "roll7",
+      "roll8",
+      "roll9",
+      "roll10"
+    ]
+  },
+  "preProcessors": [],
+  "outputColumns": ["RollNumber", "q1..180"]
+}

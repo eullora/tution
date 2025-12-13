@@ -1,0 +1,104 @@
+﻿@using Zeeble.Shared.Entities
+@{
+    Layout = null;
+    var row = ViewData["Row"] as Student;
+    var paymentRow = ViewData["PaymentRow"] as Payment;
+    var paidAmount = paymentRow.Amount;
+    var gstRate = 18.0; 
+    double tuitionFees = paidAmount * 100 / (100 + gstRate);
+    tuitionFees = Math.Round(tuitionFees, 2);
+    double cgst = Math.Round(tuitionFees * 9 / 100, 2);
+    double sgst = Math.Round(tuitionFees * 9 / 100, 2);
+    double totalWithoutRound = tuitionFees + cgst + sgst;
+    double finalTotal = Math.Round(totalWithoutRound, 0, MidpointRounding.AwayFromZero);
+    double roundOff = finalTotal - totalWithoutRound;
+}
+
+<div class="row">
+    <div class="col-md-12 text-center">
+        <div class="float-end">Student's Copy</div>
+        <h3>Tax Invoice</h3>
+        <img src="~/@ViewData["LogoImage"]" class="img-fluid mb-1" width="175" height="75">        
+        <div>@ViewData["Address"]</div>
+        <div>@ViewData["Phone"]</div>
+        <div class="fw-bold">GST Number: @ViewData["GSTNumber"]</div>      
+    </div>
+
+    <div class="col-md-12">
+        <hr />
+        <table>            
+            <tr>
+                <td width="100%" align="left">
+                    <span class="fw-bold">@row.FullName</span>
+                </td>
+            </tr>
+            <tr>
+                <td width="100%" align="left">
+                    <span>Roll Number : @row.RollNumber</span>
+                </td>
+            </tr>
+            <tr>
+                <td width="100%" align="left">
+                    <span>Batch: @row.Batch.Title</span>
+                </td>
+            </tr>
+        </table>
+    </div>
+
+    <div class="col-md-12 mt-3">
+        <table border="1" class="table table-bordered">
+            <thead>
+                <tr>
+                    <th width="70%">Description</th>
+                    <th width="30%">Amount</th>                    
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td width="70%" class="fs-6">Tution Fees</td>                    
+                    <td align="right" class="fs-6"><i class="fa fa-inr"></i>₹ @tuitionFees.ToString("#,##0.00")/-</td>
+                </tr>
+                <tr>
+                    <td width="70%" class="fs-6">CGST</td>                    
+                    <td align="right" class="fs-6"><i class="fa fa-inr"></i>₹ @cgst.ToString("#,##0.00")/-</td>
+                </tr>
+                <tr>
+                    <td width="70%" class="fs-6">SGST</td>                    
+                    <td align="right" class="fs-6"><i class="fa fa-inr"></i>₹ @sgst.ToString("#,##0.00")/-</td>
+                </tr>
+                <tr>
+                    <td width="70%" class="fs-6">Round Off</td>                    
+                    <td align="right" class="fs-6"><i class="fa fa-inr"></i>₹ @roundOff.ToString("#,##0.00")/-</td>
+                </tr>
+                <tr>
+                    <td  width="70%" class="fs-6"></td>
+                    <td align="right" class="fs-6"><i class="fa fa-inr"></i> @finalTotal.ToString("#,##0.00")/-</td>
+                </tr>
+
+            </tbody>
+        </table>
+    </div>
+
+    <div class="col-md-12">
+        <h6><b>Date :</b> @DateTime.Now.ToString("dd-MM-yyyy hh:mm")</h6>
+        <h6>Collected By @ViewData["UserName"] </h6>
+
+        <h6 class="float-end">Authority Singnature.</h6>      
+    </div>
+
+    <div class="col-md-12">        
+            <img src="@ViewData["BarCode"]" height="100" width="100" />        
+    </div>
+    <div class="col-md-12">
+        <div class="fw-bold mb-2">Terms & Conditions</div>
+        <div>            
+            एकदा दिलेली फी कोणत्याही परिस्थितीत परत केली जाणार नाही किंवा हस्तांतरित केली जाणार नाही.
+            मी पालक/विद्यार्थी शपथपूर्वक लिहून देतो कि, एकदा दिलेली फी कोणत्याही कारणास्तव परत मागणार नाही.
+        </div>
+        <div>
+            Fees once paid will not be refundable or transferred under any circumstance.
+        </div>
+    </div>
+
+</div>
+

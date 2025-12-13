@@ -1,0 +1,47 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Zeeble.Mobile.OfflineResultPage" 
+             xmlns:chart="clr-namespace:Syncfusion.Maui.Toolkit.Charts;assembly=Syncfusion.Maui.Toolkit"
+             BackgroundColor="#FFF"
+             Shell.NavBarIsVisible="False">
+
+    <StackLayout>
+
+        <Button Text="x" TextColor="Black" 
+                FontSize="Large"
+                BackgroundColor="Transparent" Clicked="Button_Clicked" HorizontalOptions="End"></Button>
+
+        <Label Text="" x:Name="LabelTestName" Margin="10,0,0,0" TextColor="Gray"  FontFamily="NotoSerifBold" FontSize="18"/>
+        
+        <Frame  BorderColor="SlateGrey" BackgroundColor="White" Padding="10" Margin="5,10" CornerRadius="0">
+            <Label   x:Name="LabelTotal" TextColor="Gray"  FontFamily="NotoSerifBold" FontSize="18" 
+             VerticalOptions="Center"
+             HorizontalOptions="Center" />
+        </Frame>
+
+        <Frame  BorderColor="SlateGrey" BackgroundColor="White" Padding="10" Margin="5" CornerRadius="0">
+            <chart:SfCircularChart HeightRequest="350">
+                <chart:SfCircularChart.Legend>
+                    <chart:ChartLegend>
+                        <chart:ChartLegend.LabelStyle>
+                            <chart:ChartLegendLabelStyle TextColor="Black" Margin="5" FontSize="12"  FontFamily="NotoSerifBold"/>
+                        </chart:ChartLegend.LabelStyle>
+                    </chart:ChartLegend>
+                </chart:SfCircularChart.Legend>
+
+                <chart:DoughnutSeries x:Name="ChartSubjectMarks"  ShowDataLabels="True"  XBindingPath="SubjectName"  YBindingPath="Marks"/>
+
+            </chart:SfCircularChart>
+        </Frame>
+        <Button HorizontalOptions="CenterAndExpand" Margin="0,20" Text="Question Paper" x:Name="ButtonDownloadPaper"
+                Clicked="ButtonDownloadPaper_Clicked"
+                CornerRadius="0" BackgroundColor="#000" TextColor="#FFF"></Button>
+
+
+        <ActivityIndicator  HorizontalOptions="Center" Margin="0,10" HeightRequest="35" IsVisible="False" Color="Gray" IsRunning="False" x:Name="LoadingIndicator" />
+
+    </StackLayout>
+    
+
+</ContentPage>

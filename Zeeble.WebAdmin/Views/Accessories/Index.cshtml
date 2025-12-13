@@ -1,0 +1,113 @@
+﻿@using Zeeble.Shared.Entities
+@{
+    ViewData["Title"] = "Accessories";
+    var rows = ViewData["Rows"] as IEnumerable<Student>;
+    var productRows = ViewData["Products"] as IEnumerable<Product>;
+}
+@section Styles {
+    <partial name="_DataTableStyles" />
+}
+<div class="container-fluid">
+    <h3 class="mb-2">Accessories</h3>
+
+    <div class="row mt-3">
+         
+
+        <div class="col-12">
+            <table id="datatableAccessories" class="table table-striped" style="width:100%">
+                <thead>
+                    <tr>
+                        <th>Student Name</th>
+                        <th>Mobile Number</th>
+                        <th>Batch</th>
+                        <th>Accessories</th>                        
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var row in rows)
+                    {
+                        <tr>
+                            <td>@row.FullName</td>
+                            <td align="center">@row.MobileNumber</td>
+                            <td>@row.Batch.Title</td>
+                            <td>@string.Join(",", row.Transactions.Select(b=> b.Product.Title))</td>                                                                                                                
+                            <td align="right">
+                                <a class="btn btn-sm btn-primary accesories" title="Accesories" student-id="@row.Id" href="javascript:void(0)"><i class="fa-solid fa-hand-holding-hand"></i></a>
+                                <a class="btn btn-sm btn-success" title="Identity Card" href="#!"><i class="fa-solid fa-id-card-clip"></i></a>
+                            </td>
+                        </tr>
+                    }
+
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="accessoriesModel" tabindex="-1"   data-bs-keyboard="false" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">                
+                <h5 class="modal-title" id="labelStudentName"></h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form>
+                <div class="modal-body">
+                    <div class="row">
+                        <input type ="hidden" id="txtStudentId" value="0" />
+                        <div class="col-md-12">                            
+                            <div class="mb-3">
+                               
+                            </div>
+
+                            <div class="row">
+                                @foreach(var prd in productRows)
+                                {
+                                    <div class="col-md-12">
+                                        <div class="form-check">
+                                            <input class="form-check-input check-product" type="checkbox" product-id="@prd.Id"  id="chkProduct-@prd.Id">
+                                            <label class="form-check-label" for="chkProduct-@prd.Id">
+                                                @prd.Title
+                                            </label>
+                                        </div>
+                                    </div>
+                                }
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <span id="message" class="text-danger"></span>
+                    <button type="button" id="btnSave" class="btn btn-primary">Save</button>
+                </div>
+
+            </form>
+        </div>
+    </div>
+</div>
+
+
+@section Scripts {
+    <partial name="_DataTableJs" />
+    <script src="~/js/accessories.js"></script>
+
+    <script type="text/javascript">
+        activeAdminMenu('#accesories');
+        $(document).ready(function() {
+            new DataTable('#datatableAccessories', {ordering: false});
+
+            $(".accesories").on('click', function(){
+                var studentId = $(this).attr('student-id');
+                loadAccessoriesModel(studentId);
+            });
+
+         $("#btnSave").click(function () {
+              updateDisbribution();         
+         });
+     });
+
+    </script>
+}

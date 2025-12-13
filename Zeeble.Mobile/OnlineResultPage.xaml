@@ -1,0 +1,126 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Zeeble.Mobile.OnlineResultPage" 
+             xmlns:chart="clr-namespace:Syncfusion.Maui.Toolkit.Charts;assembly=Syncfusion.Maui.Toolkit"             
+             BackgroundColor="#FFFFF0"
+             Shell.NavBarIsVisible="False">
+
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <chart:ChartDataLabelStyle x:Key="DataLabelStyle" FontSize="12" TextColor="Black" Background="White" />
+        </ResourceDictionary>
+    </ContentPage.Resources>
+
+    <StackLayout>
+
+        <StackLayout Orientation="Vertical" Padding="1">
+            <Button Text="X" TextColor="Black" FontSize="Large" BackgroundColor="Transparent"
+                    Clicked="Button_Clicked"
+                    HorizontalOptions="End"></Button>
+
+            <Label  FontSize="16" FontAttributes="Bold" x:Name="LabelTitle" HorizontalOptions="Start"  
+                    Margin="10,10"
+                    VerticalOptions="Start" TextColor="Black"></Label>
+            
+
+            <Frame  BorderColor="SlateGrey" BackgroundColor="White" Padding="10" Margin="5" CornerRadius="0">
+                <Label   x:Name="LabelTotal" TextColor="Gray"  FontFamily="NotoSerifBold" FontSize="18" 
+             VerticalOptions="Center"
+             HorizontalOptions="Center" />
+            </Frame>
+
+
+            <Frame  BorderColor="SlateGrey" BackgroundColor="White" Padding="10" Margin="5" CornerRadius="0">
+
+                <chart:SfCircularChart HeightRequest="200">
+
+                    <chart:DoughnutSeries x:Name="ChartSubjectMarks" ShowDataLabels="True"  EnableTooltip="True"  XBindingPath="SubjectName" 
+                                          YBindingPath="Marks"/>
+
+                    <chart:SfCircularChart.Legend>
+                        <chart:ChartLegend Placement="Bottom">
+
+                            <chart:ChartLegend.LabelStyle>
+                                <chart:ChartLegendLabelStyle 
+                                    
+                                    TextColor="Black"  Margin="5" FontSize="12"  FontFamily="NotoSerifBold"/>
+                            </chart:ChartLegend.LabelStyle>
+                        </chart:ChartLegend>
+                    </chart:SfCircularChart.Legend>
+
+
+                </chart:SfCircularChart>
+            </Frame>
+
+        </StackLayout>
+        <ActivityIndicator x:Name="LoadingIndicator" Color="Red" HeightRequest="35"></ActivityIndicator>
+
+        <ListView x:Name="ListViewAnswerSheet" IsPullToRefreshEnabled="False"   
+                  BackgroundColor="White" SelectionMode="None"
+                  SeparatorColor="Gray" SeparatorVisibility="Default"  
+                  CachingStrategy="RecycleElementAndDataTemplate"          Margin="0,5"             
+                  HasUnevenRows="True">
+
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <ViewCell>
+                        <StackLayout Padding="5">
+                            <Label  Text="{Binding SerialNumber}" HorizontalOptions="Center" TextColor="Gray" FontAttributes="Bold" FontSize="15" ></Label>
+                            <Label  Text="{Binding Subject}" HorizontalOptions="Center" TextColor="Gray" FontAttributes="Bold" FontSize="10" ></Label>
+                            <StackLayout Margin="0,5,0,10" Orientation="Horizontal" Spacing="5">
+                                
+                               <Label Text="{Binding CorrectAnswer, StringFormat='Answer: {0}'}"  
+                                      FontSize="Medium" TextColor="Green" />
+                                <Label  TextColor="Black"
+                                         FontSize="Medium"
+                                        Text="{Binding UserAnswer}" HorizontalOptions="EndAndExpand">
+
+                                    <Label.Triggers>
+                                        <DataTrigger TargetType="Label" Binding="{Binding UserAnswer}" Value="S">
+                                            <Setter Property="TextColor" Value="Red"  />
+                                            <Setter Property="Text" Value="Skip"  />
+                                        </DataTrigger>
+                                        <DataTrigger TargetType="Label" Binding="{Binding UserAnswer}" Value="">
+                                            <Setter Property="TextColor" Value="Red"  />
+                                            <Setter Property="Text" Value="No Attempt"  />
+                                        </DataTrigger>                                        
+                                        
+                                    </Label.Triggers>
+
+                                </Label>
+                                <Label TextColor="White" FontFamily="SegMDL2" Text="{Binding Remark}" Margin="0,2" FontAttributes="Bold"  HorizontalOptions="End">
+                                    <Label.Triggers>
+                                        <DataTrigger TargetType="Label" Binding="{Binding Remark}" Value="Correct">
+                                            <Setter Property="TextColor" Value="Green" />
+                                            <Setter Property="Text" Value="✔️" />
+                                        </DataTrigger>
+                                        <DataTrigger TargetType="Label" Binding="{Binding Remark}" Value="Wrong">
+                                            <Setter Property="TextColor" Value="Red"  />
+                                            <Setter Property="Text" Value="X"  />
+                                        </DataTrigger>
+                                        <DataTrigger TargetType="Label" Binding="{Binding Remark}" Value="Skip">
+                                            <Setter Property="TextColor" Value="Red"  />
+                                            <Setter Property="Text" Value="X"  />
+                                        </DataTrigger>
+                                        <DataTrigger TargetType="Label" Binding="{Binding Remark}" Value="No Attempt">
+                                            <Setter Property="TextColor" Value="Red"  />
+                                            <Setter Property="Text" Value="X"  />
+                                        </DataTrigger>
+                                    </Label.Triggers>
+                                </Label>
+                            </StackLayout>
+                            
+                            <Image  Aspect="AspectFit"   Source="{Binding ImageData}"/>
+                            <Label  Text="{Binding Mark}" Padding="3" TextColor="Gray" FontSize="15" VerticalOptions="End" HorizontalOptions="End"></Label>
+                            
+
+                        </StackLayout>
+                    </ViewCell>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+
+    </StackLayout>
+
+</ContentPage>

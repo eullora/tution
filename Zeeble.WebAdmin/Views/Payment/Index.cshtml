@@ -1,0 +1,262 @@
+﻿@using Zeeble.Shared.Entities
+@using Zeeble.Shared.Models
+@{
+    ViewData["Title"] = "Fees";
+    var row = ViewData["Row"] as Student;
+    var payTerms = ViewData["PayTermRows"] as IEnumerable<PayTerm>;
+    var discount = row != null && row.Discount != null ? row.Discount.Value : 0;
+    var installment = ViewData["Installment"] as IEnumerable<InstallmentPayModel>;
+}
+
+<div class="container">
+    <div class="row justify-content-center">
+        <h3 class="mb-3">Payments</h3>
+
+        <div class="col-lg-12 mt-2">
+            <form asp-controller="payment" method="post" id="frmSearch">
+                <div class="row mb-3">
+                    <div class="col-md-12">
+                        <div class="d-flex">
+                            <input class="form-control form-control-lg m-1" id="inputRollNumber" required type="text" autocomplete="off" name="RollNumber" placeholder="Enter Roll Number">
+                            <button type="submit" class="btn btn-primary btn-lg m-1"><i class="fa-solid fa-magnifying-glass"></i></button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+
+            <p class="mt-2">
+                <span class="text-danger">@ViewData["Message"]</span>
+            </p>
+
+        </div>
+
+        @if (row != null)
+        {
+            <div class="col-lg-12 mt-2">
+                <input type="hidden" id="txtStudentId" value="@row.Id" />
+                <input type="hidden" id="txtRollNumber" value="@row.RollNumber" />
+
+                <table class="table table-bordered mt-2">
+                    <thead>
+                        <tr>
+                            <th colspan="3" class="bg-light">
+                                <h4>@row.FullName</h4>
+                                <h5 class="float-end">Roll Number: @row.RollNumber</h5>
+                                <h5>Batch: @row.Batch.Title</h5>
+                            </th>
+                        </tr>
+                    </thead>
+                </table>
+
+                <div class="mb-3">
+                    <button class="btn btn-primary float-end m-1 mb-2" id="btnPrint"><i class="fa-solid fa-print"></i></button>
+                </div>
+                <table class="table table-bordered">
+                    <thead>
+
+                        <tr class="bg-dark text-white">
+                            <th width="25%">Description</th>
+                            <th>Due Date</th>
+                            <th>Due Amount</th>
+                            <th>Paid Date</th>
+                            <th>Paid Amount</th>
+                            <th></th>                          
+                        </tr>
+                    </thead>
+                    <tbody>
+
+                        @foreach (var install in installment)
+                        {
+
+                            <tr>
+                                <td>@install.Title</td>
+                                <td>@install.DueDate.ToString("dd/MM/yyyy")</td>
+                                <td>@install.DueAmount.ToString("#,##0.00")/-</td>
+                                <td>@(install.PaymentDate == null ? "" : install.PaymentDate.Value.ToString("dd/MM/yyyy"))</td>
+                                <td>
+                                    @if (install.IsPaid)
+                                    {
+                                        <span>@install.PaidAmount.Value.ToString("#,##0.00")/-</span>
+                                    }
+                                    else
+                                    {
+                                        <input type="text" class="form-control" id="txtAmount-@install.Id" value="@install.DueAmount">
+                                    }
+                                </td>
+                                <td valign="middle" align="center">
+
+                                    @if (install.IsPaid)
+                                    {
+
+                                        <button class="btn btn-light btn-print" item-id="@install.Id">Paid<i class="fa-solid fa-print"></i></button>
+                                    }
+                                    else
+                                    {
+                                        <button class="btn btn-success btn-sm w-100 button-accept" payterm="@install.Title" install-id="@install.Id">
+                                            Accept
+                                        </button>
+                                    }
+                                </td>
+                            </tr>
+                        }
+
+
+                        <tr>
+                            <td colspan="4" class="text-end fs-6">
+                                <p>
+                                    <strong>Total Fee </strong>
+                                </p>
+
+                                <p>
+                                    <strong>Discount</strong>
+                                </p>
+
+                                <p>
+                                    <strong>Paid Amount </strong>
+                                </p>
+                                <p>
+                                    <strong>Balance Due </strong>
+                                </p>
+                            </td>
+
+                            <td colspan="2" align="right" class="fs-6">
+                                <p>
+                                    <i class="fa fa-inr"></i> @row.Batch.Fee.Amount.ToString("#,##0.00")/-
+                                </p>
+
+                                <p>
+                                    <i class="fa fa-inr"></i> @discount.ToString("#,##0.00")/-
+                                </p>
+
+                                <p>
+                                    <i class="fa fa-inr"></i> @row.Payments.Sum(x => x.Amount).ToString("#,##0.00")/-
+                                </p>
+                                <p>
+                                    @{
+                                        var amtAfterDiscount = row.Batch.Fee.Amount - discount;
+                                        var balanceDue = amtAfterDiscount - row.Payments.Sum(x => x.Amount);
+                                    }
+                                    <i class="fa fa-inr"></i>@balanceDue.ToString("#,##0.00")/-
+                                </p>
+                            </td>
+                        </tr>
+
+                    </tbody>
+                </table>
+            </div>
+        }
+
+    </div>
+
+
+    <div class="modal fade" id="paymentModel" tabindex="-1" aria-labelledby="paymentModelLabel" data-bs-keyboard="false" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Confirm</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form>
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="col-md-12">
+
+                                <div class="mb-3">
+                                    <label id="labelPaymentType" class="form-label"></label>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label id="labelAmount" class="form-label"></label>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="txtRemark" class="form-label">Remark</label>
+                                    <input type="text" class="form-control" id="txtRemark">
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="modal-footer">
+                        <span id="message" class="text-danger"></span>
+                        <button type="button" id="btnAddPayment" class="btn btn-primary">Confirm</button>
+                    </div>
+
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="printModel" tabindex="-1" aria-labelledby="printModelLabel" data-bs-keyboard="false" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Printing</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form>
+                    <div class="modal-body" id="printContainer">
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="~/js/payments.js"></script>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            activeAdminMenu('#fees');
+            $("#inputRollNumber").val("");
+
+            $("#btnAddPayment").click(function () {
+                addPaymentTransaction();
+            });
+
+            $(".button-accept").click(function () {
+                _selectedInstallmentId = $(this).attr('install-id');
+                var payterm = $(this).attr('payterm');
+                $("#labelPaymentType").text(payterm);
+                $("#labelAmount").text('Amount: ' +  $(`#txtAmount-${_selectedInstallmentId}`).val());
+                loadPaymentModel();
+            });
+
+            $("#btnPrint").click(function () {
+                var id = $('#txtStudentId').val();
+
+                $.ajax({
+                    type: 'get',
+                    url: `/payment/reciept/${id}`,
+                    success: function (response) {
+                        openPrintWindow(response);
+                    },
+                    error: function (error) {
+                        console.log(error);
+                        alert("There is an error while generating the reciept. Please referesh this page and try again.");
+                    }
+                });
+            });
+
+           $(".btn-print").click(function () {
+                    var id = $('#txtStudentId').val();
+                    var payId = $(this).attr('item-id');
+                    $.ajax({
+                        type: 'get',
+                        url: `/payment/paid?id=${id}&installmentId=${payId}`,
+                        success: function (response) {
+                            openPrintWindow(response);
+                        },
+                        error: function (error) {
+                            console.log(error);
+                            alert("There is an error while generating the reciept. Please referesh this page and try again.");
+                        }
+                    });
+           });
+
+        });
+
+    </script>
+}

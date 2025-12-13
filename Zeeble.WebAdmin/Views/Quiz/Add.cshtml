@@ -1,0 +1,96 @@
+﻿@using Zeeble.Shared.Entities
+@{
+    ViewData["Title"] = "Add Questions";
+    var subjectOptions = ViewData["Subjects"] as IEnumerable<KeyPairModel>;
+    var standardOptions = ViewData["Standards"] as IEnumerable<KeyPairModel>;
+
+}
+<div class="container">
+    <div class="row justify-content-center">
+        <h3 class="mt-4 mb-5">Add Questions</h3>
+        
+        <div class="col-lg-12">
+            <form asp-controller="quiz" asp-action="add" method="post" enctype="multipart/form-data">
+                <div class="row mb-3">
+                   
+
+                    <div class="col-md-12 mt-3">
+                        <label for="inputTitle" class="mb-2">Title *</label>
+                        <input class="form-control" id="inputTitle" maxlength="150" autocomplete="off" required type="text" name="Title" placeholder="Enter Title">
+                    </div>
+
+                    <div class="col-md-12 mt-3">
+                        <label for="inputPreface" class="mb-2">Standard *</label>
+                        <select class="form-select" id="selectStandardId" name="StandardId" required>
+                            <option value=""></option>
+                            @foreach (var standard in standardOptions)
+                            {
+                                <option value="@standard.Id">@standard.Title</option>
+                            }
+                        </select>
+                    </div>
+
+                    <div class="col-md-12 mt-3 d-none subchap">
+                        <label for="inputPreface" class="mb-2">Subject *</label>
+                        <select class="form-select" id="selectSubjectId" name="SubjectId" required>
+                            <option value=""></option>
+                            @foreach (var subject in subjectOptions)
+                            {
+                                <option value="@subject.Id">@subject.Title</option>
+                            }
+                        </select>
+                    </div>
+
+                    <div class="col-md-12 mt-3 d-none subchap">
+                        <label for="inputPreface" class="mb-2">Chapter *</label>
+                        <select class="form-select" id="selectChapterId" name="ChapterId"  required>
+                            <option value=""></option>                             
+                        </select>
+                    </div>
+
+                    <div class="col-md-12 mt-3">
+                        <label for="questionFile" class="mb-2">Question File *</label>
+                        <input class="form-control " id="questionFile" required type="file" name="questionFile">
+                    </div>
+
+                </div>
+                <div class="mt-4 mb-0">
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                </div>
+
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script type="text/javascript">
+        var standardId ="";
+        $( document ).ready(function() {
+                   activeAdminMenu('#quiz');
+                       $('#selectSubjectId').on('change', function() {
+                       var id = $(this).val();
+                       $.ajax({
+                                url: `/api/${id}/chapters/${standardId}`,
+                        type: 'GET',
+                        dataType: 'json',
+                        success: function(result) {
+                                $('#selectChapterId').empty();
+                                $('#selectChapterId').append('<option value=""></option>');
+
+                                $.each(result, function(_, itm){
+                                    $('#selectChapterId').append(`<option value="${itm.id}">${itm.name}</option>`);
+                            });
+                         }
+                        })
+                    });
+
+                   $('#selectStandardId').on('change', function() {
+                           standardId = $(this).val();
+                                   $('#selectSubjectId').val("");
+                           $('.subchap').removeClass('d-none');
+                   });
+
+             });
+    </script>
+}

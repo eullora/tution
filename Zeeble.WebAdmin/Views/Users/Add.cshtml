@@ -1,0 +1,56 @@
+﻿@using Zeeble.Shared.Entities
+@{
+    ViewData["Title"] = "Add User";
+    var roles = ViewData["RoleRows"] as IEnumerable<Role>;
+}
+<div class="container">
+    <div class="row justify-content-center">
+        <h3 class="mt-4 mb-5">Add User</h3>
+
+        <div class="col-lg-12">
+            <form asp-controller="users" asp-action="add" method="post">
+                @Html.AntiForgeryToken()
+                <div class="row mb-3">
+
+                    <div class="col-md-6 mt-3">
+                        <div class="mb-3">
+                            <label for="inputName" class="mb-2">Full Name *</label>
+                            <input class="form-control" id="inputName" autocomplete="off" maxlength="150" required type="text" name="FullName">
+                        </div>
+                        <div class="mb-3">
+                            <label for="inputEmail" class="mb-2">Email *</label>
+                            <input class="form-control" id="inputEmail" autocomplete="off"  maxlength="150" required type="text" name="Email">
+                        </div>
+                        <div class="mb-3">
+                            <label for="inputEmail" class="mb-2">Password *</label>
+                            <input class="form-control" id="inputPassword" autocomplete="off" maxlength="30" required type="text" name="Password">
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="selectRole" class="mb-2">Role *</label>
+                            <select class="form-select" id="selectRole" name="RoleId" required>
+                                <option value=""></option>
+
+                                @foreach (var role in roles)
+                                {
+                                    <option value="@role.Id">@role.Title</option>
+                                }
+                            </select>
+                        </div>
+                       
+                    </div>
+                </div>
+                <div class="mt-4 mb-0">
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                </div>
+
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script type="text/javascript">
+        activeAdminMenu('#users')
+    </script>
+}

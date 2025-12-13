@@ -1,0 +1,154 @@
+﻿@using Zeeble.Shared.Entities
+@{
+    ViewData["Title"] = "Result";
+    var rows = ViewData["Rows"] as IEnumerable<Result>;
+    var examList = ViewData["ExamList"] as IEnumerable<KeyPairModel>;
+    var batchList = ViewData["BatchList"] as IEnumerable<KeyPairModel>;
+    var examId = ViewData["ExamId"].ToString();
+    var examRow = ViewData["ExamRow"] as Exam;
+}
+
+@section Styles {
+    <partial name="_DataTableStyles" />
+    <partial name="_Select2Css" />
+}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <h3 class="mb-2">Result</h3>
+
+            <div class="row mt-3">
+                @if (examRow != null)
+                {
+                    <div class="col-12 mb-2">
+                        <a href="javascript:void(0);" id="btnAddResult" class="btn btn-dark m-1 float-end">+</a>
+                    </div>
+                }
+
+                <div class="col-12">
+                    <div class="card bg-light">
+                        <div class="card-body p-3">
+                            <div class="mb-3">
+                                <label for="selectExamList" class="m-1 mt-3 fw-bold">Exam</label>
+                                <select class="form-select m-1 mb-2" id="selectExamList">
+                                    <option value="0">All</option>
+                                    @foreach (var exm in examList)
+                                    {
+                                        <option value="@exm.Id">@exm.Title</option>
+                                    }
+                                </select>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-12 mt-4">
+                    <table id="datatableResult" class="table table-striped" style="width:100%">
+                        <thead>
+                            <tr>
+                                <th>Exam Name</th>
+                                <th>Student</th>
+                                <th>Batch</th>
+                                <th>Marks</th>
+                                <th>Date</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            @foreach (var row in rows)
+                            {
+                                <tr>
+                                    <td>@row.Exam.Name</td>
+                                    <td>@row.Student.FullName</td>
+                                    <td>@row.Student.Batch.Title</td>
+                                    <td>@row.Marks</td>
+                                    <td>@row.CreatedOn</td>
+
+                                    <td align="right">
+                                        <a href="javascript:void(0);" class="btn btn-sm btn-info"><i class="fa-solid fa-chart-line"></i></a>
+                                    </td>
+                                </tr>
+                            }
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+@if (examRow != null)
+{
+    <div class="modal fade" id="addResultModel" tabindex="-1" data-bs-keyboard="true" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">                    
+                    <h5 class="modal-title" id="labelExamName">@examRow.Name</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                
+                    <div class="modal-body">
+                        <div class="row">                            
+                            <div class="col-lg-12">
+                                <div class="row mb-3">
+                                    <div>
+                                        <div class="col-md-12">                                           
+                                            <label for="resultFile" class="mb-2 fw-bold">Result Excel File *</label>
+                                            <input class="form-control form-control-lg" id="resultFile" required type="file" name="resultFile">
+                                            <input type="hidden" id="txtExamId" value="@examRow.Id" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <span id="message" class="text-danger"></span>
+                        <div class="mt-4 mb-0">
+                            <button type="button" id="btnUploadFile" class="btn btn-primary">Submit</button>
+                        </div>
+                    </div>
+            </div>
+        </div>
+    </div>
+}
+
+@section Scripts {
+
+    <partial name="_DataTableJs" />
+    <partial name="_Select2Js" />
+    <script src="~/js/examresult.js"></script>
+
+    <script type="text/javascript">
+             activeAdminMenu('#result');
+
+             $(document).ready(function() {
+             $('#selectExamList').select2( {theme: "bootstrap-5", placeholder: "Please select exam" }).on('select2:select', function (e) {
+                    window.location = `/result?examId=${e.params.data.id}`;
+             });
+
+            new DataTable('#datatableResult', {
+                   ordering: false,
+                   pageSize: 20
+            });
+
+            var examId = '@ViewData["ExamId"].ToString()';
+
+            if(examId !=""){
+                 $('#selectExamList').val(@ViewData["ExamId"].ToString()).select2({theme: "bootstrap-5" });
+            }
+
+            $("#btnAddResult").on('click', function(){                        
+                  loadAddResult();
+            });
+
+            $("#btnUploadFile").on('click', function () {
+                
+            });
+        });
+
+    </script>
+}

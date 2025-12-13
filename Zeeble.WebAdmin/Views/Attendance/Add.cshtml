@@ -1,0 +1,36 @@
+﻿@using Zeeble.Shared.Entities
+@{
+    ViewData["Title"] = "Add Attendance";
+    var batches = ViewData["Batches"] as IEnumerable<Batch>;
+    var exanTypes = ViewData["ExamTypes"] as IEnumerable<ExamType>;
+    var subjects = ViewData["Subjects"] as IEnumerable<Subject>;   
+}
+
+<div class="container">
+    <div class="row justify-content-center">
+        <h3 class="mb-5">Upload Attendance</h3>
+     
+        <div class="col-lg-12">
+            <form asp-controller="attendance" asp-action="add" method="post" enctype="multipart/form-data">                
+
+                <div class="row mb-3">
+                    <div class="col-md-12">
+                        <label for="attendanceFile" class="mb-2">CSV File *</label>
+                        <input class="form-control" id="attendanceFile" required type="file" name="AttendanceFile">
+                    </div>
+                </div>
+
+                <div class="mt-4 mb-0">
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                </div>
+
+            </form>               
+        </div>
+    </div>
+</div>
+
+@section Scripts {   
+    <script type="text/javascript">
+        activeAdminMenu('#attendance');
+    </script>
+}

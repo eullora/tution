@@ -1,0 +1,131 @@
+﻿@using Zeeble.Shared.Entities
+@{
+    ViewData["Title"] = "Admission";
+    var row = ViewData["StudentRow"] as Student;
+}
+<div class="container">
+    <div class="row justify-content-center">
+
+        <div class="col-md-12">
+            <section class="py-3 py-md-5">
+                <div class="container">
+
+                    <div class="row justify-content-center">
+                        <div class="col-12">
+                            <div class="row gy-3 mb-3">
+                                <div class="col-12">
+                                    <small class="float-end">@row.CreatedOn.ToString("dd/MM/yyyy hh:mm")</small>
+                                </div>
+                                <div class="col-6 border-bottom">
+                                    <h4 class="text-uppercase text-endx mt-2 mb-4">Admission Form</h4>
+
+                                </div>
+                                <div class="col-6 border-bottom">
+                                    <a class="d-block text-end" href="#!">
+                                        <img src="~/@ViewData["LogoImage"]" class="img-fluid mb-4" width="150" height="50">
+                                    </a>
+                                </div>
+
+                                <div class="col-4">
+                                    <h5>@row.FullName</h5>
+                                    <address>
+                                        <div>
+                                            @row.Address
+                                        </div>
+                                        <div>Parent  Phone: +91 @row.ParentMobile</div>
+                                        <div>Student Phone: +91 @row.MobileNumber</div>
+                                    </address>
+                                </div>
+                                <div class="col-8">
+                                    <div class="float-end">
+                                        <h5>Roll Number: @row.RollNumber</h5>
+                                        <div>Batch: @row.Batch.Title</div>
+                                        <div>School: @row.SchoolName</div>
+
+                                    </div>
+                                </div>
+                            </div>
+
+                            @if (row.Installments != null && row.Installments.Count() > 0)
+                            {
+
+                                <div class="row mb-3">
+                                    <div class="col-md-12 mt-3">
+                                        <table class="table table-striped">
+                                            <tbody class="table-group-divider">
+                                                <tr>
+                                                    <td class="fw-bold">Course Fee</td>
+                                                    <td class="text-end">₹ @row.Batch.Fee.Amount /-</td>
+                                                </tr>
+                                                <tr>
+                                                    <td class="fw-bold">Discount</td>
+                                                    <td class="text-end">₹ @row.Discount /-</td>
+                                                </tr>
+                                                <tr>
+                                                    <td align="right" class="fw-bold">Total</td>
+                                                    <td><span class="float-end">₹ @(row.Batch.Fee.Amount - row.Discount) /-</span></td>
+                                                </tr>
+
+                                            </tbody>
+                                        </table>
+                                        <table class="table  table-bordered">
+                                            <tr>
+                                                <td></td>
+                                                <td>Term</td>
+                                                <td>Due Date</td>
+                                                <td>Amount</td>
+                                            </tr>
+
+                                            @foreach (var install in row.Installments)
+                                            {
+                                                <tr>
+                                                    <td></td>
+                                                    <td>@install.PayTerm.Title</td>
+                                                    <td>@install.DueDate.ToString("dd/MM/yyyy")</td>
+                                                    <td>₹ @install.Amount /-</td>
+                                                </tr>
+                                            }
+                                        </table>
+                                    </div>
+                                </div>
+                            }
+
+                            <input type="hidden" id="txtStudentId" value="@row.Id" />
+                            <div class="row">
+                                <div class="col-12 text-end">
+                                    <button type="button" id="btnPrint" class="btn btn-primary mb-3">Print</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="~/js/payments.js"></script>
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+            activeAdminMenu('#students');
+            $("#btnPrint").click(function () {
+                var id = $('#txtStudentId').val();
+
+                $.ajax({
+                    type: 'get',
+                    url: `/admit/printform/${id}`,
+                    success: function (response) {
+                        openPrintWindow(response);
+                    },
+                    error: function (error) {
+                        console.log(error);
+                        alert("There is an error while printing the admission form. Please referesh this page and try again.");
+                    }
+                })
+            })
+        });
+
+    </script>
+}

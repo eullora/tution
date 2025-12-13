@@ -1,0 +1,110 @@
+﻿@using Zeeble.Shared.Entities
+@{
+    ViewData["Title"] = "Student Performance";
+    var rows = ViewData["Rows"] as IEnumerable<Result>;
+    var studentRow = ViewData["Student"] as Student;
+}
+@section Styles {
+    <link rel="stylesheet" href="https://cdn.datatables.net/2.1.7/css/dataTables.dataTables.css" />
+}
+
+<div class="container-fluid">
+    <h3 class="mb-2">Student Performance</h3>
+
+    <div class="row mt-3">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-body bg-light">
+                    <h5>@studentRow.FullName</h5>
+                    <h6>@studentRow.Batch.Title</h6>
+                </div>
+            </div>
+        </div>
+        <div class="col-12 mt-2">
+            <div class="row">
+                <div class="col-4">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="chart-container">
+                                <canvas id="barChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-5">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="chart-container">
+                                <canvas id="horizontalBarChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-3 text-center">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="chart-container">
+                                <canvas id="attendanceChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-12 mt-4">
+            <table id="datatablePerformance" class="table table-striped" style="width:100%">
+                <thead>
+                    <tr>
+                        <th>Exam Name</th>
+                        <th>Marks</th>
+                        <th>Date</th>
+                        <th></th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    @foreach (var row in rows)
+                    {
+                        <tr>
+                            <td>@row.Exam.Name</td>
+                            <td>@row.Marks</td>
+                            <td>@row.CreatedOn</td>
+                            <td align="right">
+                                <a href="javascript:void(0);" class="btn btn-sm btn-info analysis" result-id="@row.Id" title="Analysis">
+                                    <i class="fa-solid fa-chart-simple"></i>
+                                </a>
+                            </td>
+                        </tr>
+                    }
+
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+
+    <script src="https://cdn.datatables.net/2.1.7/js/dataTables.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels"></script>
+
+    <script src="~/js/analysis.js"></script>
+    <script type="text/javascript">
+     activeAdminMenu('#students');
+     $(document).ready(function() {
+        new DataTable('#datatablePerformance', {
+        ordering: false
+        });
+
+        $(".analysis").on('click', function(event){
+            var resultId = $(this).attr('result-id');                
+         });
+
+         getAnalysis(@studentRow.Id);
+
+     });
+
+    </script>
+}

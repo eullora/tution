@@ -1,0 +1,113 @@
+﻿.sticky-icon {
+    z-index: 1;
+    position: fixed;
+    top: 25%;
+    right: 0%;
+    width: 250px;
+    display: flex;
+    flex-direction: column;
+}
+
+    .sticky-icon a {
+        transform: translate(200px,0px);
+        text-align: left;
+        margin: 0px;
+        text-decoration: none;
+        padding: 10px;
+        font-size: 20px;
+        font-family: 'Oswald', sans-serif;
+        transition: all 0.8s;
+    }
+
+        .sticky-icon a:hover {
+            color: #FFF;
+            transform: translate(0px,0px);
+        }
+
+            .sticky-icon a:hover i {
+                transform: rotate(360deg);
+            }
+
+.Facebook {
+    background-color: #4267B2;
+    border-bottom: 1px solid rgba(0,0,0,.4);
+    color: #FFF;
+}
+
+.Youtube {
+    background-color: #fa0910;
+    border-bottom: 1px solid rgba(0,0,0,.4);
+    color: #FFF;
+}
+
+.WhatsApp {
+    background-color: #059630;
+    color: #FFF;
+}
+
+.Instagram {
+    background-color: #E1306C;
+    color: #FFF;
+    border-bottom: 1px solid rgba(0,0,0,.4);
+}
+
+.LinkedIn {
+    background-color: #2867B2;
+    border-bottom: 1px solid rgba(0,0,0,.4);
+    color: #FFF;
+}
+
+.sticky-icon a i {
+    background-color: #FFF;
+    height: 40px;
+    width: 40px;
+    color: #000;
+    text-align: center;
+    line-height: 40px;
+    border-radius: 50%;
+    margin-right: 20px;
+    font-size: 28px;
+    transition: all 0.5s;
+}
+
+    .sticky-icon a i.fa-facebook-f {
+        background-color: #FFF;
+        color: #2C80D3;
+    }
+
+    .sticky-icon a i.fa-linkedin-i {
+        background-color: #FFF;
+        color: #d34836;
+    }
+
+    .sticky-icon a i.fa-instagram {
+        background-color: #FFF;
+        color: #FD1D1D;
+    }
+
+    .sticky-icon a i.fa-youtube {
+        background-color: #FFF;
+        color: #fa0910;
+    }
+
+    .sticky-icon a i.fa-whatsapp {
+        background-color: #FFF;
+        color: #059630;
+    }
+@media (min-width: 1024px) {
+    .whatsapp-button{
+        display:none
+    }
+}
+
+@media (min-width: 640px) and (orientation: landscape) {
+    .whatsapp-button {
+        display: none
+    }
+}
+@media only screen and (min-device-width: 320px) and (max-device-width:480px) {
+
+    #social-icons {
+        display: none
+    }
+}

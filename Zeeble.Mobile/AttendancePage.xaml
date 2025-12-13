@@ -1,0 +1,132 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Zeeble.Mobile.AttendancePage"
+              xmlns:chart="clr-namespace:Syncfusion.Maui.Toolkit.Charts;assembly=Syncfusion.Maui.Toolkit"
+                xmlns:calendar="clr-namespace:Syncfusion.Maui.Toolkit.Calendar;assembly=Syncfusion.Maui.Toolkit"
+              xmlns:viewmodels="clr-namespace:Zeeble.Mobile.ViewModels"  
+               xmlns:ce ="clr-namespace:Zeeble.Mobile.CustomControls"
+
+              Shell.TitleColor="Gray"
+            Shell.BackgroundColor="#FFF"      
+            Shell.ForegroundColor="Gray"
+             BackgroundColor="#FFF"              
+             Title="Attendance">
+
+    <ContentPage.BindingContext>
+        <viewmodels:AttendanceViewModel/>
+    </ContentPage.BindingContext>
+
+    <ScrollView>
+        <VerticalStackLayout Padding="10" Spacing="15">
+            
+            <Frame BackgroundColor="White" CornerRadius="10" Padding="8" HasShadow="True">
+                <VerticalStackLayout>
+                    <Label Text="Year Attendance Score" FontSize="Small" Margin="0,5" TextColor="Black" FontAttributes="Bold" />
+                    <Grid ColumnDefinitions="*" RowDefinitions="*,Auto">
+                        <VerticalStackLayout Grid.Column="0" Grid.Row="0">
+                            <Label Text="" TextColor="Gray" FontSize="Small"    x:Name="LabelTotalDaysInYear" />
+                            <Label Text="" TextColor="Gray" FontSize="Small" x:Name="LabelDaysPresentInYear"  />
+                        </VerticalStackLayout>
+                        <Frame BackgroundColor="White" HeightRequest="220" BorderColor="White" WidthRequest="220" Padding="0" 
+                               Grid.Column="0" Grid.Row="1">
+                            <chart:SfCircularChart>
+
+                                <chart:SfCircularChart.Legend>
+                                    <chart:ChartLegend>
+                                        <chart:ChartLegend.LabelStyle>
+                                            <chart:ChartLegendLabelStyle TextColor="Black" Margin="5" FontSize="12"  FontFamily="NotoSerifBold"/>
+                                        </chart:ChartLegend.LabelStyle>
+                                    </chart:ChartLegend>
+                                </chart:SfCircularChart.Legend>
+
+                                <chart:PieSeries  x:Name="OverViewChart"
+                                                       ShowDataLabels="True"
+                                                       XBindingPath="Title"   YBindingPath="Days">
+                                    <chart:PieSeries.DataLabelSettings>
+                                        <chart:CircularDataLabelSettings UseSeriesPalette="True"/>
+                                    </chart:PieSeries.DataLabelSettings>
+                                </chart:PieSeries>
+                                
+                            </chart:SfCircularChart>
+                        </Frame>
+                    </Grid>
+                </VerticalStackLayout>
+            </Frame>
+
+            <!-- This Month's Progress Section -->
+            <Frame BackgroundColor="White" CornerRadius="10" Padding="8" HasShadow="True">
+                <VerticalStackLayout>
+                    <Label x:Name="LableMonthHeader" Text="Current Month" FontSize="Small" TextColor="Black" FontAttributes="Bold" />
+                    <Grid ColumnDefinitions="*,*,*" RowDefinitions="Auto" Margin="0,10,0,0">
+                        <VerticalStackLayout Grid.Column="0" HorizontalOptions="Center">
+                            <Label Text="26" FontSize="Large"  FontAttributes="Bold" TextColor="#FF9800" x:Name="LabelTotalDaysInMonth" />
+                            <Label Text="Total Days" FontSize="Small" TextColor="Gray" />
+                        </VerticalStackLayout>
+                        <VerticalStackLayout Grid.Column="1" HorizontalOptions="Center">
+                            <Label Text="22" FontSize="Large" FontAttributes="Bold" TextColor="#4CAF50" x:Name="LabelPresentDaysInMonth" />
+                            <Label Text="Days Present" FontSize="Small" TextColor="Gray" />
+                        </VerticalStackLayout>
+                        <VerticalStackLayout Grid.Column="2" HorizontalOptions="Center">
+                            <Label Text="4" FontSize="Large" FontAttributes="Bold" TextColor="#F44336" x:Name="LabelAbsentDaysInMonth" />
+                            <Label Text="Days Absent" FontSize="Small" TextColor="Gray" />
+                        </VerticalStackLayout>
+                    </Grid>
+                    
+                </VerticalStackLayout>
+            </Frame>
+
+            <Label Text="Entry Time" Margin="0,10,0,0" TextColor="Gray"  FontFamily="NotoSerifBold" FontSize="16"/>
+
+            <ActivityIndicator HorizontalOptions="Center"  Color="Gray" HeightRequest="30" IsVisible="False" IsRunning="False" x:Name="LoadingIndicator"></ActivityIndicator>
+            
+            <ce:CustomPicker x:Name="MonthPicker" TextColor="Black" BackgroundColor="White"
+                    SelectedIndexChanged="MonthPicker_SelectedIndexChanged"></ce:CustomPicker>
+            
+            <ListView x:Name="ListViewAttendance"  SeparatorVisibility="Default" 
+                      SeparatorColor="LightGray" SelectionMode="None"
+                       BackgroundColor="White">
+                
+
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <ViewCell>
+                            <Grid Padding="5">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="45"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
+                                
+                                <Label Text="{Binding Day}"  Grid.Column="0" 
+                                            Padding="5" BackgroundColor="SlateGray" 
+                                            FontFamily="NotoSerifBold" HorizontalTextAlignment="Center" VerticalTextAlignment="Center" FontAttributes="Bold"
+                                            TextColor="White" />
+
+                                <StackLayout Grid.Column="1" Margin="10,8,0,0">
+                                    <Label Text="{Binding CheckInTime}" FontSize="12" FontFamily="NotoSerifBold"   TextColor="Black"/>
+                                </StackLayout>
+
+                                <Label Grid.Column="2" Text="{Binding Remark}" FontSize="12" TextColor="Green" VerticalOptions="Center" HorizontalOptions="End">
+                                    <Label.Triggers>
+                                        <DataTrigger TargetType="Label" Binding="{Binding Remark}" Value="Absent">
+                                            <Setter Property="TextColor" Value="Red"/>
+                                        </DataTrigger>
+                                    </Label.Triggers>
+
+                                </Label>
+                            </Grid>
+                        </ViewCell>
+
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+
+
+
+
+
+        </VerticalStackLayout>
+    </ScrollView>
+
+</ContentPage>

@@ -1,0 +1,133 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
+             xmlns:chart="clr-namespace:Syncfusion.Maui.Toolkit.Charts;assembly=Syncfusion.Maui.Toolkit"                             
+             x:Class="Zeeble.Mobile.HomePage" BackgroundColor="#FFF">
+
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <chart:ChartDataLabelStyle x:Key="DataLabelStyle" CornerRadius="0"  FontSize="10" TextColor="Black"  Background="White"  />
+        </ResourceDictionary>
+    </ContentPage.Resources>
+
+    <ScrollView>
+        <StackLayout Padding="0" Spacing="20">
+
+            <Label Text="My Performance" Margin="10,10,0,0" TextColor="Gray"  FontFamily="NotoSerifBold" FontSize="20"/>
+            <ActivityIndicator HorizontalOptions="Center"  HeightRequest="35" IsVisible="False"  Color="Gray" IsRunning="False" x:Name="LoadingIndicator"></ActivityIndicator>
+            
+            <Frame BorderColor="#fff" BackgroundColor="White" Margin="0" HeightRequest="380" CornerRadius="0" HasShadow="True">
+                <Frame.Shadow>
+                    <Shadow Brush="LightGray" ></Shadow>
+                </Frame.Shadow>
+                
+                <chart:SfCartesianChart    IsTransposed="True" BackgroundColor="White">
+                    <chart:SfCartesianChart.Title>
+                        <Label Text="Last 10 Exam Marks" FontSize="12"  TextColor="#000" HorizontalTextAlignment="End"/>
+                    </chart:SfCartesianChart.Title>
+
+                    <chart:SfCartesianChart.XAxes>
+                        <chart:CategoryAxis ShowMajorGridLines="False"    />
+                    </chart:SfCartesianChart.XAxes>
+
+                    <chart:SfCartesianChart.YAxes>
+                        <chart:NumericalAxis ShowMinorGridLines="False" ShowMajorGridLines="False"  />
+                    </chart:SfCartesianChart.YAxes>
+
+                    <chart:ColumnSeries ItemsSource="{Binding ExamData}" ShowDataLabels="True" 
+                                        x:Name="ChartLastExams" XBindingPath="Title" YBindingPath="Marks" Width="0.8"  Spacing="0.2">
+
+                        <chart:ColumnSeries.DataLabelSettings>
+                            <chart:CartesianDataLabelSettings  LabelPlacement="Center"  LabelStyle="{StaticResource DataLabelStyle}"/>
+                        </chart:ColumnSeries.DataLabelSettings>
+
+                    </chart:ColumnSeries>
+
+                </chart:SfCartesianChart>
+            </Frame>
+            
+            <Frame BorderColor="#fff" BackgroundColor="White" Margin="0,0,0,0" CornerRadius="0" HeightRequest="320" HasShadow="True">
+                <Frame.Shadow>
+                    <Shadow Brush="LightGray" ></Shadow>
+                </Frame.Shadow>
+                <chart:SfCircularChart  BackgroundColor="White">
+                    <chart:SfCircularChart.Title>
+                        <Label Text="Average Per Subject Last 10 Exams" FontSize="12"   TextColor="Gray" HorizontalTextAlignment="Start"/>
+                    </chart:SfCircularChart.Title>
+
+                    <chart:SfCircularChart.Legend>
+                        <chart:ChartLegend>
+                            <chart:ChartLegend.LabelStyle>
+                                <chart:ChartLegendLabelStyle Margin="5" FontSize="12"  />
+                            </chart:ChartLegend.LabelStyle>
+                        </chart:ChartLegend>
+                    </chart:SfCircularChart.Legend>
+                    <chart:SfCircularChart.Series>
+                        <chart:PieSeries x:Name="TestChart"  
+                                         EnableTooltip="True"
+                                         XBindingPath="SubjectName"  YBindingPath="Marks" ShowDataLabels="True" />
+                    </chart:SfCircularChart.Series>
+                </chart:SfCircularChart>
+
+            </Frame>
+            
+            <Label Text="Exam Result" Margin="10,0,0,1"  FontFamily="NotoSerifBold" TextColor="Gray"  FontSize="18"/>
+            
+            <ListView x:Name="ListViewAllExams" IsGroupingEnabled="True" 
+                      SelectionMode="None"
+                      SeparatorVisibility="Default" 
+                      HasUnevenRows="True"
+                      GroupDisplayBinding="{Binding MonthName}" BackgroundColor="White">
+                <ListView.GroupHeaderTemplate>
+                    <DataTemplate>
+                        <ViewCell>
+                            <StackLayout  Padding="10" Margin="0" BackgroundColor="AliceBlue">
+                                <Label Text="{Binding MonthName}"   FontFamily="NotoSerifBold" TextColor="Gray" FontSize="14" />
+                            </StackLayout>
+                        </ViewCell>
+                    </DataTemplate>
+                </ListView.GroupHeaderTemplate>
+
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <ViewCell>
+                            <Grid Padding="5">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="50"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
+
+                                
+                                <Label Text="{Binding Day}"  Grid.Column="0" 
+                                       Padding="5" Margin="1" BackgroundColor="#000"  
+                                       HorizontalTextAlignment="Center" VerticalTextAlignment="Center"
+                                       FontAttributes="Bold"
+                                       TextColor="White">
+
+                                    <Label.Triggers>
+                                        <DataTrigger TargetType="Label" Binding="{Binding Remark}" Value="Absent">
+                                            <Setter Property="BackgroundColor" Value="Red"/>
+                                        </DataTrigger>
+                                    </Label.Triggers>
+                                </Label>
+
+
+                                <StackLayout Grid.Column="1" Margin="10,0,0,0">
+                                    <Label Text="{Binding ExamName}" FontSize="15"   TextColor="Black"/>
+                                    <Label Text="{Binding Marks, StringFormat='Marks {0}'}" FontSize="12" TextColor="Black"/>
+                                    <Label Text="{Binding SubjectMarks}" FontSize="12" HorizontalOptions="EndAndExpand" TextColor="Black" />
+                                     
+                                </StackLayout>
+
+                               
+                            </Grid>
+                        </ViewCell>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+
+        </StackLayout>
+    </ScrollView>
+
+</ContentPage>

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Shell
+    x:Class="Zeeble.Mobile.AppShell"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:local="clr-namespace:Zeeble.Mobile" 
+    Shell.TabBarBackgroundColor="Black"
+    Shell.TabBarUnselectedColor="Gray"        
+    FlyoutBehavior="Disabled">
+
+    
+    <TabBar>
+        <Tab  x:Name="HomeTab" Title="Home" Icon="home.png">
+            <ShellContent ContentTemplate="{DataTemplate local:HomePage}" Route="home"/>
+        </Tab>
+        <Tab x:Name="SectionsTab" Title="Sections" Icon="categories.png">
+            <ShellContent ContentTemplate="{DataTemplate local:SectionsPage}" Route="sections"/>
+        </Tab>
+        <Tab x:Name="ExamTab" Icon="exam.png" Title="Exams">
+            <ShellContent Title="Offline"  ContentTemplate="{DataTemplate local:OfflineExamPage}"/>
+            <ShellContent Title="Online" ContentTemplate="{DataTemplate local:OnlineExamPage}"/>
+        </Tab>
+        <Tab x:Name="ProfileTab" Icon="profile.png" Title="Profile">
+            <ShellContent ContentTemplate="{DataTemplate local:ProfilePage}" Route="profile"/>
+        </Tab>
+    </TabBar>
+     
+</Shell>

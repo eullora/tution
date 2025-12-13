@@ -1,0 +1,48 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Zeeble.Mobile.ProfilePage"  
+             Shell.NavBarIsVisible="False"
+            Shell.BackgroundColor="#FFF"  Shell.ForegroundColor="Gray" 
+            BackgroundColor="#FFF">
+
+    <StackLayout  Spacing="10">
+        <Label Text="My Profile" TextColor="Gray" Margin="10,10,0,20"  FontFamily="NotoSerifBold" FontSize="20"/>
+        <Image HorizontalOptions="Center" Source="user.png" HeightRequest="110" WidthRequest="110"></Image>
+        <Label x:Name="LabelName" HorizontalOptions="Center" FontFamily="NotoSerifBold" Margin="5" TextColor="Gray" 
+               FontSize="Medium"></Label>
+
+        <VerticalStackLayout>
+            <ListView x:Name="ListViewProfileDetails"  SeparatorVisibility="Default"  VerticalScrollBarVisibility="Never" HorizontalScrollBarVisibility="Never"
+                      SeparatorColor="White" SelectionMode="None"
+                      BackgroundColor="Beige">
+
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <TextCell  Text="{Binding .}" TextColor="Black"></TextCell>
+
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+        </VerticalStackLayout>
+
+        <Label Text="Settings" TextColor="Gray" Margin="10,10,0,10"  FontFamily="NotoSerifBold" FontSize="18"/>
+
+        <VerticalStackLayout>
+            <ListView x:Name="ListViewSettings"  SeparatorVisibility="Default"  VerticalScrollBarVisibility="Never" HorizontalScrollBarVisibility="Never"
+                      SeparatorColor="LightGray" SelectionMode="None"
+                      BackgroundColor="White">
+
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <TextCell  Text="{Binding .}" TextColor="Black"></TextCell>
+
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+        </VerticalStackLayout>
+
+    </StackLayout>
+     
+
+</ContentPage>
