@@ -13,6 +13,7 @@ Zeeble is a private class management platform that helps manage students, classe
   <tr>
     <td><img src="mobile.jfif" width="300" height="650"></td>
     <td><img src="exam.jpg" width="350" height="650"></td>
+    <td><img src="quiz.jpg" width="350" height="650"></td>
   </tr>
 </table>
 
