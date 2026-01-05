@@ -9,6 +9,14 @@ Zeeble is a private class management platform that helps manage students, classe
 <img src="mobile.jfif" width="300" height="650">
 <img src="exam.jpg" width="350" height="650">
 
+## 🎯 BubbleCheck 
+.NET MAUI Cross Platofrm desktop application to scan the OMR anwer sheets.
+
+<img src="omr_scan.jpg">
+<img src="omr_scan_result.png">
+
+
+
 ## 🧰 Project Structure
 
 The repository is organised into multiple sub‑projects/modules:
