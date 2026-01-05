@@ -19,12 +19,12 @@ Zeeble is a private class management platform that helps manage students, classe
 
 
 ## 🎯 BubbleCheck 
-.NET MAUI Cross Platofrm desktop application to scan the OMR anwer sheets.
-
+.NET MAUI Cross-Platform Desktop Application for Scanning OMR Answer Sheets
+This application is a cross-platform desktop solution built using .NET MAUI that is designed to scan, process, and evaluate OMR (Optical Mark Recognition) answer sheets used in exams, quizzes, and assessments.
+* **Key Purpose**
+The main goal of the application is to automate the evaluation of paper-based multiple-choice exams, reducing manual effort, human error, and processing time.
 <img src="omr_scan.jpg">
 <img src="omr_scan_result.png">
-
-
 
 ## 🧰 Project Structure
 
