@@ -7,6 +7,7 @@ A management system for private classes — designed for private tutions from cl
 Zeeble is a private class management platform that helps manage students, classes, quizzes, results, and related workflows. It consists of modular components handling backend API, admin UI, quizzes, class tests, data libraries, and more — making it suitable for coaching institutes or private tutors aiming to organise courses, track students, and manage assessments.
 
 <img src="mobile.jfif" width="300" height="650">
+<img src="exam.jpg" width="600" height="650">
 
 ## 🧰 Project Structure
 
@@ -20,6 +21,7 @@ The repository is organised into multiple sub‑projects/modules:
 * Solution file: `Zeeble.sln` — root solution for building the entire system
 
 <img src="admin.png" width="600" height="650">
+
 
 
 
